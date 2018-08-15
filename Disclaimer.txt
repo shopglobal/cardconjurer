@@ -1,0 +1,23 @@
+Disclaimer:
+-----------------------------------------------------------------------
+Kyle's Card Imager is in no way affiliated with, sponsored by, or 
+endorsed by Wizards of the Coast. Mana symbols and other related images 
+are trademarks and copyrights of Wizards of the Coast, LLC, a 
+subsidiary of Hasbro, Inc.
+-----------------------------------------------------------------------
+Some images used in this program have been gathered from the following 
+sources under the Creative Commons BY-NC-SA 2.5 License:
+
+  MTG Gamepedia (https://mtg.gamepedia.com/Main_Page)
+  Magic Set Editor (http://magicseteditor.boards.net/)
+  Scryfall (scryfall.com)
+
+Some changes have been made to the images.
+-----------------------------------------------------------------------
+Any other uploaded artwork is property of the original artist, and it
+is at the discretion of the users that these images are properly 
+credited.
+-----------------------------------------------------------------------
+Links:
+Creative Commons
+  https://creativecommons.org/licenses/by-nc-sa/2.5/
