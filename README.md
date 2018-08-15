@@ -5,4 +5,4 @@ To install KCI, download the zip file and make sure to unzip it! After that, ope
 
 
 
-[![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](google.com)
+[![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://www.google.com/)
