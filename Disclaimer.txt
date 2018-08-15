@@ -5,8 +5,8 @@ endorsed by Wizards of the Coast. Mana symbols and other related images
 are trademarks and copyrights of Wizards of the Coast, LLC, a 
 subsidiary of Hasbro, Inc.
 -----------------------------------------------------------------------
-Some images used in this program have been gathered from the following 
-sources under the Creative Commons BY-NC-SA 2.5 License:
+Some fonts images used in this program have been gathered from the 
+following sources under the Creative Commons BY-NC-SA 2.5 License:
 
   MTG Gamepedia (https://mtg.gamepedia.com/Main_Page)
   Magic Set Editor (http://magicseteditor.boards.net/)
