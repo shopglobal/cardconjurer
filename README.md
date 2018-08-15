@@ -1,2 +1,4 @@
 # Kyles-Card-Imager
 An open source project created by a high school student that draws custom Magic: The Gathering cards
+
+To install KCI, download the zip file and make sure to unzip it! After that, open the folder called 'KylesCardImager' and run the html file.
