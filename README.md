@@ -5,4 +5,5 @@ To install KCI, download the zip file and make sure to unzip it! After that, ope
 
 
 
-[![Donate](https://img.shields.io/badge/Donate-PayPal-blue.svg?longCache=true&style=popout)](https://www.google.com/) ← Help me keep playing magic by donating any amount!
+[![Donate](https://img.shields.io/badge/Donate-PayPal-blue.svg?longCache=true&style=popout)](paypal.me/kyleburtondonate
+) ← Help me keep playing magic by donating any amount!
