@@ -1,0 +1,531 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<title>Kyle's Card Imager</title>
+	<script src="data/scripts/loadScript.js"></script>
+	<script src="data/scripts/loadImage.js"></script>
+	<script src="data/scripts/loadColors.js"></script>
+	<script src="data/scripts/mask.js"></script>
+	<div id="title">Kyle's Card Imager</div>
+</head>
+<body>
+	<canvas id="canvas" width="749" height="1044"></canvas>
+		<!--OPTIONS-->
+	<br>
+	<button onclick="howTo()" class="button">How To Use KCI</button>
+	<br><br>
+	<div class="wrapper">
+	Border
+	<select id="borderSelection" onchange="updateBorder()">
+		<option value="m15/">M15</option>
+		<option value="8th/">8th</option>
+	</select>
+	<br>
+	Color
+	<select id="colorSelection" onchange="updateColor()">
+		<option value="white">White</option>
+		<option value="blue">Blue</option>
+		<option value="black">Black</option>
+		<option value="red">Red</option>
+		<option value="green">Green</option>
+		<option value="gold">Gold</option>
+		<option value="artifact">Artifact</option>
+		<option value="colorless">Colorless</option>
+		<option value="whiteLand">White Land</option>
+		<option value="blueLand">Blue Land</option>
+		<option value="blackLand">Black Land</option>
+		<option value="redLand">Red Land</option>
+		<option value="greenLand">Green Land</option>
+		<option value="goldLand">Gold Land</option>
+		<option value="colorlessLand">Colorless Land</option>
+	</select>
+	<br>
+	<input type="checkbox" id="creatureCheckbox" onchange="updateColor()">Power/Toughness
+	<input id="inputPowerToughness" value=""></input></input>
+	<br>
+	<input type="checkbox" id="legendaryCheckbox" onchange="updateColor()">Legendary</input>
+	<br>
+	<input type="checkbox" id="rareStampCheckbox" onchange="updateColor()">Rare Stamp</input>
+	<br>
+	<input type="checkbox" id="foilCheckbox">Foil</input>
+	<br><br>
+	Name
+	<input id="inputName"></input>
+	<br>
+	Mana Cost
+	<input id="inputCost"></input>
+	<br>
+	Type
+	<input id="inputType"></input>
+	<br><br>
+	Rules Text
+	<br>
+	<textarea id="inputText" rows="5" cols="40"></textarea>
+	<br>
+	Rules Text Font Size
+	<input id="textSize" type="number" min="30" max="38" value="37" step="1"></input>
+	<br>
+	Pixels Between Paragraphs
+	<input id="textShift" type="number" min="0" max="300" value="0"></input>
+	<br>
+	Shift All Text Down
+	<input id="textDown" type="number" min="0" max="300" value="0"></input>
+	<br><br>
+	Image
+	<input type="file" accept="image/*" onchange="loadImage(event, imgArt, true)" id="inputPicture"></input>
+	<br>
+	Image Zoom
+	<input id="imageSize" type="number" value="100" step="0.1"></input>
+	<br>
+	Image Left
+	<input id="imageLeft" type="number" value="0" step="1"></input>
+	<br>
+	Image Up
+	<input id="imageUp" type="number" value="0" step="1"></input>
+	<br><br>
+	Other Info
+	<input id="inputInfo" value="Not A Real Card"></input>
+	<br>
+	Card Number
+	<input id="inputNumber" value="001/001"></input>
+	<br>
+	Rarity
+	<input id="inputRarity" value="C"></input>
+	<br>
+	Set Abbreviation
+	<input id="inputSet" value="MTG"></input>
+	<br>
+	Language
+	<input id="inputLanguage" value="EN"></input>
+	<br>
+	Artist Credit
+	<input id="inputArtist" value=""></input>
+	<br>
+	<input id="artistColor" type="checkbox">Make Artist Credit font black</input>
+	<br><br>
+	<input type="checkbox" id="setSymbolCheckbox" checked="true"></input>
+	Set Symbol
+	<input type="file" accept="image/*" onchange="loadImage(event, imgSetSymbol, true)" id="inputSetSymbol"></input>
+	<br><br>
+	<input type="checkbox" id="watermarkCheckbox" checked="true"></input>
+	Watermark
+	<input type="file" accept="image/*" onchange="loadImage(event, imgWatermark, true)" id="inputWatermark"></input>
+	<br>
+	Watermark Color
+	<select id="watermarkColorSelection">
+		<option value="#afa360">White</option>
+		<option value="#04527c">Blue</option>
+		<option value="#494949">Black</option>
+		<option value="#a3280d">Red</option>
+		<option value="#0f4f14">Green</option>
+		<option value="#7f5f00">Gold</option>
+		<option value="#616b72">Artifact/Colorless</option>
+	</select>
+</div>
+<br>
+<div id="info">For Terms of Use and Disclaimer, see the main folder.</div>
+</body>
+
+
+
+<!--CSS-->
+<style>
+@font-face {
+	font-family: relaymedium;
+	src: url("data/fonts/relay-medium.ttf");
+}
+@font-face {
+	font-family: belerenb;
+	src: url("data/fonts/beleren-b.ttf");
+}
+@font-face {
+	font-family: belerenbsc;
+	src: url("data/fonts/beleren-bsc.ttf");
+}
+@font-face {
+	font-family: matrixbsc;
+	src: url("data/fonts/matrix-bsc.ttf");
+}
+@font-face {
+	font-family: matrix;
+	src: url("data/fonts/matrix.ttf");
+}
+@font-face {
+	font-family: matrixb;
+	src: url("data/fonts/matrix-b.ttf");
+}
+@font-face {
+  font-family: mplantin;
+  src: url("data/fonts/mplantin.ttf");
+}
+button {
+	color: rgb(128,255,128);
+	font-family: belerenbsc;
+	font-size: 20px;
+	background-color: rgb(96,96,96);
+}
+.wrapper * {
+	color: rgb(255,255,255);
+	font-family: mplantin;
+	font-size: 18px;
+	background-color: rgb(96,96,96);
+}
+#title {
+	text-align: center;
+	color: rgb(128,255,128);
+	font-family: belerenbsc;
+	font-size: 60px;
+}
+#info {
+	text-align: center;
+	color: rgb(96,96,96);
+	font-family: belerenbsc;
+	font-size: 16px;
+}
+body {
+	color: rgb(255,255,255);
+	font-family: belerenbsc;
+	font-size: 18px;
+	background-color: rgb(56,56,56);
+}
+canvas {
+	float: left;
+	padding: 10px;
+}
+</style>
+
+
+
+<script>
+loadScript("data/borders/m15/border.js")
+var borderPath
+var m15Info = true
+//set up canvas
+var canvas = document.getElementById("canvas")
+var card = canvas.getContext("2d")
+var imgCardMask = new Image()
+imgCardMask.src = "data/borders/cardMask.png"
+//prepare for images
+var imgBorderColor = new Image()
+var imgBorderCreature = new Image()
+var imgBorderLegendary = new Image()
+var imgBorderRareStamp = new Image()
+var imgBorderStampHolo = new Image()
+var imgArt = new Image()
+var imgArtMask = new Image()
+var imgSetSymbol = new Image()
+var imgArtistBrush = new Image()
+var imgWatermark = new Image()
+var imgFoil = new Image()
+imgArtistBrush.src = "data/borders/artistBrush.png"
+imgBorderStampHolo.src = "data/borders/rareStamp.png"
+imgFoil.src = "data/borders/foil.png"
+//Mana symbol Array setup
+var manaSymbolCode = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "w", "u", "b", "r", "g", "2w", "2u", "2b", "2r", "2g", "pw", "pu", "pb", "pr", "pg", "wu", "wb", "ub", "ur", "br", "bg", "rg", "rw", "gw", "gu", "x", "snow", "c", "t","untap", "e"]
+var manaSymbolImages = new Array()
+for (var i = 0; i < manaSymbolCode.length; i++) {
+	manaSymbolImages[i] = new Image()
+	manaSymbolImages[i].src = "data/manaSymbols/" + i + ".png"
+}
+
+
+//Runs ten times every second (main loop)
+	updateBorder()
+	setInterval(function() {
+		card.globalCompositeOperation = "source-over"
+		card.drawImage(imgCardMask, 0, 0, 749, 1044)
+		card.globalCompositeOperation = "source-atop"
+		drawPicture()
+		drawBorder()
+		drawSetSymbol()
+		drawManaCost()
+		drawWatermark()
+		writeText()
+		if (m15Info == true) {
+			bottomInfoM15()
+		}
+		if (eighthInfo == true) {
+			bottomInfo8th()
+		}
+		if(document.getElementById("foilCheckbox").checked == true) {
+			card.drawImage(imgFoil, 0, 0, canvas.width, canvas.height)
+		}
+		//Vertical Line
+		//card.beginPath()
+		//card.moveTo(setSymbolRight, 0)
+		//card.lineTo(setSymbolRight, 1044)
+		//card.stroke()
+		//Horizontal Line
+		//card.beginPath()
+		//card.moveTo(0, setSymbolY)
+		//card.lineTo(749, setSymbolY)
+		//card.stroke()
+	}, 100)
+
+
+
+//Load Border Images
+function updateBorder() {
+	loadScript("data/borders/" + document.getElementById("borderSelection").value + "border.js")
+	document.getElementById("colorSelection").value = "white"
+	imgArtMask.src = "data/borders/" + document.getElementById("borderSelection").value + "artMask.png"
+	updateColor()
+}
+function updateColor() {
+	borderPath = "data/borders/" + document.getElementById("borderSelection").value + document.getElementById("colorSelection").value
+	imgBorderColor.src = borderPath + "/frame.png"
+	imgBorderCreature.src = borderPath + "/pt.png"
+	if (m15Info == true) {
+		imgBorderLegendary.src = borderPath + "/legendary.png"
+		imgBorderRareStamp.src = borderPath + "/stamp.png"
+	}
+}
+//Draw Border
+function drawBorder() {
+	drawMask(imgBorderColor, 0, 0, canvas.width, canvas.height, imgArtMask)
+	if (m15Info == true) {
+		if (document.getElementById("legendaryCheckbox").checked == true && imgBorderLegendary.width != 0) {
+			card.drawImage(imgBorderLegendary, 0, 0, canvas.width, canvas.height)
+		}
+		if (document.getElementById("rareStampCheckbox").checked == true) {
+			if (imgBorderRareStamp.width != 0) {
+				card.drawImage(imgBorderRareStamp, 329, rareStampY - 15, 90, 50)
+			}
+			card.drawImage(imgBorderStampHolo, 340, rareStampY, 70, 37)
+		}
+	}
+}
+
+
+//Draw Picture
+function drawPicture() {
+	var imageScale = document.getElementById("imageSize").value * 0.01
+	var imageLeftShift = parseInt(document.getElementById("imageLeft").value)
+	var imageUpShift = parseInt(document.getElementById("imageUp").value)
+	card.drawImage(imgArt, 58 - imageLeftShift, 119 - imageUpShift, imgArt.width * imageScale, imgArt.height * imageScale)
+}
+
+//Draw Set Symbol
+function drawSetSymbol() {
+	if (imgSetSymbol.src != "" && document.getElementById("setSymbolCheckbox").checked == true) {
+		var height = setSymbolHeight
+		var width = imgSetSymbol.width * (height / imgSetSymbol.height)
+		if (width > setSymbolWidth) {
+			width = setSymbolWidth
+			height = imgSetSymbol.height * (width / imgSetSymbol.width)
+		}
+		var y = setSymbolY - height / 2
+		var x = setSymbolRight - width
+		card.drawImage(imgSetSymbol, x, y, width, height)
+	}
+}
+
+//Draw Watermark
+function drawWatermark() {
+	if (imgWatermark.src != "" && document.getElementById("watermarkCheckbox").checked == true) {
+		var height = watermarkHeight
+		var width = imgWatermark.width * (height / imgWatermark.height)
+		if (width > watermarkWidth) {
+			width = watermarkWidth
+			height = imgWatermark.height * (width / imgWatermark.width)
+		}
+		var x = canvas.width / 2 - width / 2
+		var y = watermarkY - height / 2
+		//Tint Watermark
+	    var c = document.createElement("canvas")
+	    var cctx = c.getContext("2d")
+	    c.width = width
+	    c.height = height
+	    cctx.globalCompositeOperation = "source-over";
+	    cctx.drawImage(imgWatermark, 0, 0, width, height);
+	    cctx.globalCompositeOperation = "source-atop";
+	    cctx.fillStyle = document.getElementById("watermarkColorSelection").value
+	    cctx.fillRect(0,0,width,height);
+	    card.globalAlpha = 0.4
+	    card.drawImage(c, x, y, width, height);
+	    card.globalAlpha = 1
+	}
+}
+
+//Mana cost
+function drawManaCost() {
+	card.fillStyle = "Black"
+	var symbols = document.getElementById("inputCost").value.split(" ")
+	var xShift = 0
+	for (n = symbols.length; n > -1; n--) {
+		if (manaSymbolCode.indexOf(symbols[n]) != -1) {
+		card.beginPath()
+		card.arc(manaCostX + xShift + manaCostRadius - 1, manaCostY + manaCostRadius + 3.5, manaCostRadius, 0, 6.29, false)
+		card.fill()
+		card.drawImage(manaSymbolImages[manaSymbolCode.indexOf(symbols[n])], manaCostX + xShift, manaCostY, manaCostRadius * 2, manaCostRadius * 2)
+		xShift -= 39
+	}
+}
+}
+
+//Write Text
+function writeText() {
+	//All use these:
+	card.textBaseline = "top"
+	card.fillStyle = "Black"
+	//Title
+	canvas.style.letterSpacing = titleFontSpacing
+	card.font = titleFont	
+	card.fillText(document.getElementById("inputName").value, titleX, titleY)
+
+	//Type
+	canvas.style.letterSpacing = typeFontSpacing
+	card.font = typeFont
+	card.fillText(document.getElementById("inputType").value, typeX, typeY)
+
+	//Rules Text
+	canvas.style.letterSpacing = textFontSpacing + "px"
+	card.font = document.getElementById("textSize").value + textFont
+	var text = document.getElementById("inputText").value
+	rulesText(text, textX, textY)
+
+	//Power/Toughness
+	if (document.getElementById("creatureCheckbox").checked == true) {
+		card.drawImage(imgBorderCreature, ptX, ptY, ptWidth, ptHeight)
+		canvas.style.letterSpacing = ptFontSpacing
+		card.font = ptFont
+		powerToughness = document.getElementById("inputPowerToughness").value
+		card.fillText(powerToughness, ptTextX - (card.measureText(powerToughness).width / 2), ptTextY)
+	}
+}
+
+//Bottom info on M15 cards
+function bottomInfoM15() {
+	card.fillStyle = "white"
+	canvas.style.letterSpacing = "0.8px"
+	card.font = "19.5px relaymedium"
+	var bottomLine = document.getElementById("inputSet").value + " · " + document.getElementById("inputLanguage").value
+	card.fillText(bottomLine, 48, m15InfoY)
+	var artistBrushShift = card.measureText(bottomLine).width + 58
+	card.drawImage(imgArtistBrush, artistBrushShift, m15InfoY + 5, 21, 13)
+	canvas.style.letterSpacing = "1.3px"
+	card.font = "19.5px relaymedium"
+	card.fillText(document.getElementById("inputNumber").value, 49, m15InfoY - 20)
+	card.fillText(document.getElementById("inputRarity").value, artistBrushShift - 1, m15InfoY - 20)
+	canvas.style.letterSpacing = "-0.1px"
+	card.font = "24px matrixbsc"
+	card.fillText(document.getElementById("inputArtist").value, artistBrushShift + 21, m15InfoY + 2)
+	canvas.style.letterSpacing = "0px"
+	card.font = "17px mplantin"
+	if (document.getElementById("creatureCheckbox").checked == true) {
+		card.fillText("KCI — " + document.getElementById("inputInfo").value, 445, m15InfoY)
+	} else {
+		card.fillText("KCI — " + document.getElementById("inputInfo").value, 445, m15InfoY - 18)
+	}
+}
+//Bottom info on 8th edition cards
+function bottomInfo8th() {
+	if (document.getElementById("artistColor").checked == true) {
+		card.fillStyle = "black"
+	} else {
+		card.fillStyle = "white"
+	}
+	canvas.style.letterSpacing = "1px"
+	card.font = "25px matrixb"
+	card.fillText(document.getElementById("inputArtist").value, 116, eighthInfoY)
+	canvas.style.letterSpacing = "0.5px"
+	card.font = "16px mplantin"
+	card.fillText("KCI —" + document.getElementById("inputInfo").value + " " + document.getElementById("inputNumber").value, 62, eighthInfoY + 31)
+}
+
+
+
+
+//Write rules and flavor text
+function rulesText(text, x, y) {
+	var paragraphShift = parseInt(document.getElementById("textShift").value, 10)
+	var paragraphDown = parseInt(document.getElementById("textDown").value, 10)
+	var words = (text + " ").split(" ")
+	var testLine = ""
+	var line = ""
+	var xShift = 0
+	var textSize = parseInt(document.getElementById("textSize").value)
+	y += paragraphDown
+	for(var n = 0; n < words.length; n++) {
+		//Special characters/fonts
+		if (words[n] == "<i>") {
+			card.fillText(line, x + xShift, y)
+			xShift += card.measureText(line).width
+			line = ""
+			canvas.style.letterSpacing = textFontSpacing * 1/3 + "px"
+			card.font = "italic " + textSize + textFont
+		} else if (words[n] == "</i>") {
+			card.fillText(line, x + xShift, y)
+			xShift += card.measureText(line).width
+			line = ""
+			canvas.style.letterSpacing = textFontSpacing + "px"
+			card.font = "normal " + textSize + textFont
+		} else if (words[n] == "<line>") {
+			card.fillText(line, x + xShift, y)
+			line = ""
+			y += textSize + 1 + paragraphShift
+			xShift = 0
+		} else if (words[n] == "<lineNoSpace>") {
+			card.fillText(line, x + xShift, y)
+			line = ""
+			y += textSize + 1
+			xShift = 0
+		} else if (words[n].includes("<") && words[n].includes(">")) {
+			var splitWord = words[n].split("<")
+			aMax = words[n].length
+			for (var a = 0; a < aMax; a++) {
+				var extraSpace
+				if (words[n].charAt(0) == "<") {
+					card.fillText(line, x + xShift, y)
+					xShift += card.measureText(line).width
+					line = ""
+					if (extraSpace == true) {
+						xShift += 2
+					}
+					card.drawImage(manaSymbolImages[manaSymbolCode.indexOf(words[n].substring(words[n].indexOf("<") + 1, words[n].indexOf(">")))], x + xShift + textSize * 0.054, y + textSize * 0.22 - 1, textSize * 0.77, textSize * 0.77)
+					xShift += textSize * 0.84
+					words[n] = words[n].slice(words[n].indexOf(">") + 1, words[n].length)
+					extraSpace = true
+				} else {
+					line += words[n].charAt(0)
+					words[n] = words[n].slice(1, words[n].length)
+					extraSpace = false
+				}
+				if (a == aMax -1) {
+					line += " "
+				}
+			}
+		} else {
+			//REAL WORD
+			testLine = line + words[n]
+			var lineSize = card.measureText(testLine).width
+			if (lineSize + xShift + x > textWidth && n > 0) {
+				//Word is too big
+				card.fillText(line, x + xShift, y)
+				line = words[n] + " "
+				y += textSize + 1
+				xShift = 0
+			} else {
+				//Word fits
+				line = testLine + " "
+				if (n + 1 == words.length) {
+				card.fillText(line, x + xShift, y)
+				}
+			}
+		}
+	}
+}
+
+
+function howTo() {
+	window.alert("First, select a border, a color, and select whether or not you want to include a Power/Toughness, Legendary Border, Rare Stamp, or Foil Overlay.")
+	window.alert("Then, fill in all the details such as the card name, type, text, etc...")
+	window.alert("When typing in the mana cost use the following format: '3 g u'")
+	window.alert("The symbols are labeled w u b r g, add a prefix of 'p' for phyrexian mana, or a prefix of '2' for colorless hybrid mana. For regular hybrid mana, make sure to use the correct order. For example, 'gu' is correct for Green/Blue hybrid mana while 'ug' is incorrect. You can also use numbers 0-20, 'c' for colorless (diamond) mana, 't' for tap, 'untap' for untap, 'e' for energy, and 'snow' for snow mana.")
+	window.alert("the same codes used in the mana cost are also used in the rules text. Just put a '<' before each code and a '>' after each code. For example, '<3><pg><t>' would display the three mana symbol, the phyrexian green mana symbol, and the tap symbol. In addition to mana symbols, you can use '<i>' to start italicized text and '</i>' to end it. '<line>' will skip to the next line and allow for extra spacing when you increase the Pixels Between Paragraphs, and '<lineNoSpace>' will ignore the Pixels Between Paragraphs. These other codes require a space (' ') before and after the carrots. ('<' and '>')")
+	window.alert("To upload the card image, the set symbol, or the watermark, click the associated 'Choose File' button and navigate to your desired image. Below the Image selector, you may adjust the Zoom, Left, and Up values to scale or move the card image. If you upload your own set symbols or watermarks, it is recommended that you crop these images have transparent backgrounds and are cropped sufficiently.")
+	window.alert("Remember to properly credit any artwork that you upload!")
+	window.alert("Thank you for using Kyle's Card Imager, remember that all this code is free but donations are greatly appreciated!")
+}
+</script>
+<html>
