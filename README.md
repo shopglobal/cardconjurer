@@ -9,4 +9,4 @@ To install KCI, download the file titled 'KCI' and open it. (make sure it's not 
 ) ← Help me keep playing magic by donating any amount!
 
 
-[![Donate](https://pbs.twimg.com/profile_images/747496339789885441/edJhUw82_400x400.jpg)](https://pucatrade.com/invite/gift/186748) ← Or join Pucatrade with this link
+[![Donate](https://img.shields.io/badge/Join-PucaTrade-purple.svg?longCache=true&style=popout)](https://pucatrade.com/invite/gift/186748) ← Or join Pucatrade with this link
