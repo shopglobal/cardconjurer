@@ -13,3 +13,4 @@ here are some samples:
 <img src="sampleCards/sample-card-1.png" alt="Sample image" width="400">
 <img src="sampleCards/sample-card-2.png" alt="Sample image" width="400">
 <img src="sampleCards/sample-card-3.png" alt="Sample image" width="400">
+<img src="sampleCards/sample-card-4.png" alt="Sample image" width="400">
