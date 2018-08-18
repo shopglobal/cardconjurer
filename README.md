@@ -9,5 +9,5 @@ To install KCI, download the file titled 'KCI' and open it. (make sure it's not 
 [![Donate](https://img.shields.io/badge/Join-PucaTrade-purple.svg?longCache=true&style=popout)](https://pucatrade.com/invite/gift/186748) ← Or join Pucatrade with this link
 <br><br>
 here are some samples:
-<br>
-<img src="sampleCards/sample-card-1.png" alt="Sample image" width="200">
+<br><br>
+<img src="sampleCards/sample-card-1.png" alt="Sample image" width="400">
