@@ -149,6 +149,10 @@
 	font-family: mplantin;
 	src: url("data/fonts/mplantin.ttf");
 }
+@font-face {
+	font-family: mplantini;
+	src: url("data/fonts/mplantin-i.ttf");
+}
 button {
 	color: rgb(128,255,128);
 	font-family: belerenbsc;
@@ -485,7 +489,7 @@ function rulesText(text, x, y) {
 			xShift += card.measureText(line).width
 			line = ""
 			canvas.style.letterSpacing = textFontSpacing * 1/3 + "px"
-			card.font = "italic " + textSize + textFont
+			card.font = textSize + textFont + "i"
 		} else if (words[n] == "</i>") {
 			card.fillText(line, x + xShift, y)
 			xShift += card.measureText(line).width
