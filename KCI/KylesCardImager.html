@@ -10,120 +10,111 @@
 </head>
 <body>
 	<canvas id="canvas" width="749" height="1044"></canvas>
-		<!--OPTIONS-->
-	<br>
+	<!--OPTIONS-->
 	<button onclick="howTo()" class="button">How To Use KCI</button>
 	<br><br>
 	<div class="wrapper">
-	Border
-	<select id="borderSelection" onchange="updateBorder()">
-		<option value="m15/">M15</option>
-		<option value="8th/">8th</option>
-	</select>
+		Border
+		<select id="borderSelection" onchange="updateBorder()">
+			<option value="m15/">M15</option>
+			<option value="8th/">8th</option>
+		</select>
+		<br>
+		Color
+		<select id="colorSelection" onchange="updateColor()">
+			<option value="white">White</option>
+		</select>
+		<br>
+		<input type="checkbox" id="checkboxSecondColor" onchange="updateColor()">Second Color <select id="secondColorSelection" onchange="updateColor()"></select></input>
+		<br>
+		<input type="checkbox" id="checkboxThirdColor" onchange="updateColor()">Third Color <select id="thirdColorSelection" onchange="updateColor()"></select></input>
+		<br>
+		<input type="checkbox" id="creatureCheckbox" onchange="updateColor()">Power/Toughness
+		<input id="inputPowerToughness" value=""></input></input>
+		<br>
+		<input type="checkbox" id="legendaryCheckbox" onchange="updateColor()">Legendary</input>
+		<br>
+		<input type="checkbox" id="rareStampCheckbox" onchange="updateColor()">Rare Stamp</input>
+		<br>
+		<input type="checkbox" id="foilCheckbox">Foil</input>
+		<br><br>
+		Name
+		<input id="inputName"></input>
+		<br>
+		Mana Cost
+		<input id="inputCost"></input>
+		<br>
+		Type
+		<input id="inputType"></input>
+		<br><br>
+		Rules Text
+		<br>
+		<textarea id="inputText" rows="5" cols="40"></textarea>
+		<br>
+		Rules Text Font Size
+		<input id="textSize" type="number" min="30" max="38" value="37" step="1"></input>
+		<br>
+		Pixels Between Paragraphs
+		<input id="textShift" type="number" min="0" max="300" value="0"></input>
+		<br>
+		Shift All Text Down
+		<input id="textDown" type="number" min="0" max="300" value="0"></input>
+		<br><br>
+		Image
+		<input type="file" accept="image/*" onchange="loadImage(event, imgArt, true)" id="inputPicture"></input>
+		<br>
+		Image Zoom
+		<input id="imageSize" type="number" value="100" step="0.1"></input>
+		<br>
+		Image Left
+		<input id="imageLeft" type="number" value="0" step="1"></input>
+		<br>
+		Image Up
+		<input id="imageUp" type="number" value="0" step="1"></input>
+		<br><br>
+		Other Info
+		<input id="inputInfo" value="Not A Real Card"></input>
+		<br>
+		Card Number
+		<input id="inputNumber" value="001/001"></input>
+		<br>
+		Rarity
+		<input id="inputRarity" value="C"></input>
+		<br>
+		Set Abbreviation
+		<input id="inputSet" value="MTG"></input>
+		<br>
+		Language
+		<input id="inputLanguage" value="EN"></input>
+		<br>
+		Artist Credit
+		<input id="inputArtist" value=""></input>
+		<br>
+		<input id="artistColor" type="checkbox">Make Artist Credit font black</input>
+		<br><br>
+		<input type="checkbox" id="setSymbolCheckbox" checked="true"></input>
+		Set Symbol
+		<input type="file" accept="image/*" onchange="loadImage(event, imgSetSymbol, true)" id="inputSetSymbol"></input>
+		<br><br>
+		<input type="checkbox" id="watermarkCheckbox" checked="true"></input>
+		Watermark
+		<input type="file" accept="image/*" onchange="loadImage(event, imgWatermark, true)" id="inputWatermark"></input>
+		<br>
+		Watermark Color
+		<select id="watermarkColorSelection">
+			<option value="#afa360">White</option>
+			<option value="#04527c">Blue</option>
+			<option value="#494949">Black</option>
+			<option value="#a3280d">Red</option>
+			<option value="#0f4f14">Green</option>
+			<option value="#7f5f00">Gold</option>
+			<option value="#616b72">Artifact/Colorless</option>
+		</select>
+		<br>
+		<input type="checkbox" id="checkboxSecondWatermarkColor"> Second Watermark Color <select id="secondWatermarkColorSelection"></select></input>
+	</div>
 	<br>
-	Color
-	<select id="colorSelection" onchange="updateColor()">
-		<option value="white">White</option>
-		<option value="blue">Blue</option>
-		<option value="black">Black</option>
-		<option value="red">Red</option>
-		<option value="green">Green</option>
-		<option value="gold">Gold</option>
-		<option value="artifact">Artifact</option>
-		<option value="colorless">Colorless</option>
-		<option value="whiteLand">White Land</option>
-		<option value="blueLand">Blue Land</option>
-		<option value="blackLand">Black Land</option>
-		<option value="redLand">Red Land</option>
-		<option value="greenLand">Green Land</option>
-		<option value="goldLand">Gold Land</option>
-		<option value="colorlessLand">Colorless Land</option>
-	</select>
-	<br>
-	<input type="checkbox" id="creatureCheckbox" onchange="updateColor()">Power/Toughness
-	<input id="inputPowerToughness" value=""></input></input>
-	<br>
-	<input type="checkbox" id="legendaryCheckbox" onchange="updateColor()">Legendary</input>
-	<br>
-	<input type="checkbox" id="rareStampCheckbox" onchange="updateColor()">Rare Stamp</input>
-	<br>
-	<input type="checkbox" id="foilCheckbox">Foil</input>
-	<br><br>
-	Name
-	<input id="inputName"></input>
-	<br>
-	Mana Cost
-	<input id="inputCost"></input>
-	<br>
-	Type
-	<input id="inputType"></input>
-	<br><br>
-	Rules Text
-	<br>
-	<textarea id="inputText" rows="5" cols="40"></textarea>
-	<br>
-	Rules Text Font Size
-	<input id="textSize" type="number" min="30" max="38" value="37" step="1"></input>
-	<br>
-	Pixels Between Paragraphs
-	<input id="textShift" type="number" min="0" max="300" value="0"></input>
-	<br>
-	Shift All Text Down
-	<input id="textDown" type="number" min="0" max="300" value="0"></input>
-	<br><br>
-	Image
-	<input type="file" accept="image/*" onchange="loadImage(event, imgArt, true)" id="inputPicture"></input>
-	<br>
-	Image Zoom
-	<input id="imageSize" type="number" value="100" step="0.1"></input>
-	<br>
-	Image Left
-	<input id="imageLeft" type="number" value="0" step="1"></input>
-	<br>
-	Image Up
-	<input id="imageUp" type="number" value="0" step="1"></input>
-	<br><br>
-	Other Info
-	<input id="inputInfo" value="Not A Real Card"></input>
-	<br>
-	Card Number
-	<input id="inputNumber" value="001/001"></input>
-	<br>
-	Rarity
-	<input id="inputRarity" value="C"></input>
-	<br>
-	Set Abbreviation
-	<input id="inputSet" value="MTG"></input>
-	<br>
-	Language
-	<input id="inputLanguage" value="EN"></input>
-	<br>
-	Artist Credit
-	<input id="inputArtist" value=""></input>
-	<br>
-	<input id="artistColor" type="checkbox">Make Artist Credit font black</input>
-	<br><br>
-	<input type="checkbox" id="setSymbolCheckbox" checked="true"></input>
-	Set Symbol
-	<input type="file" accept="image/*" onchange="loadImage(event, imgSetSymbol, true)" id="inputSetSymbol"></input>
-	<br><br>
-	<input type="checkbox" id="watermarkCheckbox" checked="true"></input>
-	Watermark
-	<input type="file" accept="image/*" onchange="loadImage(event, imgWatermark, true)" id="inputWatermark"></input>
-	<br>
-	Watermark Color
-	<select id="watermarkColorSelection">
-		<option value="#afa360">White</option>
-		<option value="#04527c">Blue</option>
-		<option value="#494949">Black</option>
-		<option value="#a3280d">Red</option>
-		<option value="#0f4f14">Green</option>
-		<option value="#7f5f00">Gold</option>
-		<option value="#616b72">Artifact/Colorless</option>
-	</select>
-</div>
-<br>
-<div id="info">For Terms of Use and Disclaimer, see the main folder.</div>
+	<div id="info">For Terms of Use and Disclaimer, see <a href="https://github.com/ImKyle4815/Kyles-Card-Imager" target="_blank">the Github page</a>.</div>
 </body>
 
 
@@ -155,8 +146,8 @@
 	src: url("data/fonts/matrix-b.ttf");
 }
 @font-face {
-  font-family: mplantin;
-  src: url("data/fonts/mplantin.ttf");
+	font-family: mplantin;
+	src: url("data/fonts/mplantin.ttf");
 }
 button {
 	color: rgb(128,255,128);
@@ -192,34 +183,46 @@ canvas {
 	float: left;
 	padding: 10px;
 }
+a:link {
+	color: rgb(128,128,128); 
+}
+
+a:visited {
+	color: rgb(128,128,128);
+}
+
+a:hover {
+	color: rgb(128,255,128);
+}
+
+a:active {
+	color: rgb(128,255,128);
+}
 </style>
 
 
 
 <script>
+//set up initial variables
 loadScript("data/borders/m15/border.js")
 var borderPath
 var m15Info = true
 //set up canvas
 var canvas = document.getElementById("canvas")
 var card = canvas.getContext("2d")
-var imgCardMask = new Image()
-imgCardMask.src = "data/borders/cardMask.png"
-//prepare for images
-var imgBorderColor = new Image()
-var imgBorderCreature = new Image()
-var imgBorderLegendary = new Image()
-var imgBorderRareStamp = new Image()
-var imgBorderStampHolo = new Image()
-var imgArt = new Image()
-var imgArtMask = new Image()
-var imgSetSymbol = new Image()
-var imgArtistBrush = new Image()
-var imgWatermark = new Image()
-var imgFoil = new Image()
-imgArtistBrush.src = "data/borders/artistBrush.png"
-imgBorderStampHolo.src = "data/borders/rareStamp.png"
-imgFoil.src = "data/borders/foil.png"
+//Load dynamic images
+var dynamicImageList = ["borderColor", "secondBorderColor", "thirdBorderColor", "borderCreature", "secondBorderCreature", "thirdBorderCreature", "borderLegendary", "secondBorderLegendary", "thirdBorderLegendary", "borderRareStamp", "secondBorderRareStamp", "art", "artMask", "setSymbol", "watermark", "multiMask"]
+for (i = 0; i < dynamicImageList.length; i ++) {
+	var imgName = "img" + dynamicImageList[i].charAt(0).toUpperCase() + dynamicImageList[i].slice(1)
+	window[imgName] = new Image()
+}
+//Load static images
+var staticImageList = ["artistBrush", "foil", "stampGradient", "multiGradient", "rareStamp", "cardMask"]
+for (i = 0; i < staticImageList.length; i ++) {
+	var imgName = "img" + staticImageList[i].charAt(0).toUpperCase() + staticImageList[i].slice(1)
+	window[imgName] = new Image()
+	window[imgName].src = "data/borders/" + staticImageList[i] + ".png"
+}
 //Mana symbol Array setup
 var manaSymbolCode = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "w", "u", "b", "r", "g", "2w", "2u", "2b", "2r", "2g", "pw", "pu", "pb", "pr", "pg", "wu", "wb", "ub", "ur", "br", "bg", "rg", "rw", "gw", "gu", "x", "snow", "c", "t","untap", "e"]
 var manaSymbolImages = new Array()
@@ -227,29 +230,36 @@ for (var i = 0; i < manaSymbolCode.length; i++) {
 	manaSymbolImages[i] = new Image()
 	manaSymbolImages[i].src = "data/manaSymbols/" + i + ".png"
 }
+//fill second watermark dropdown menu
+document.getElementById("secondWatermarkColorSelection").innerHTML = document.getElementById("watermarkColorSelection").innerHTML
 
 
 //Runs ten times every second (main loop)
-	updateBorder()
-	setInterval(function() {
+updateBorder()
+setInterval(function() {
+		//Insures that the corners of the final image are transparent
 		card.globalCompositeOperation = "source-over"
 		card.drawImage(imgCardMask, 0, 0, 749, 1044)
 		card.globalCompositeOperation = "source-atop"
+		//These functions draw everything
 		drawPicture()
 		drawBorder()
 		drawSetSymbol()
 		drawManaCost()
 		drawWatermark()
 		writeText()
+		//m15 and 8th edition have different info at the bottom of the cards and require completely different functions
 		if (m15Info == true) {
 			bottomInfoM15()
 		}
 		if (eighthInfo == true) {
 			bottomInfo8th()
 		}
+		//A shiny foil overlay!
 		if(document.getElementById("foilCheckbox").checked == true) {
 			card.drawImage(imgFoil, 0, 0, canvas.width, canvas.height)
 		}
+		//These are for pinpointing coordinates while adjusting values for new border types
 		//Vertical Line
 		//card.beginPath()
 		//card.moveTo(setSymbolRight, 0)
@@ -264,49 +274,74 @@ for (var i = 0; i < manaSymbolCode.length; i++) {
 
 
 
-//Load Border Images
+//Loads different types of borders
 function updateBorder() {
+	//the loadScript function is located in data/scripts/loadScript.js. It sets values to variables such as set symbol coordinates or title font
 	loadScript("data/borders/" + document.getElementById("borderSelection").value + "border.js")
 	document.getElementById("colorSelection").value = "white"
 	imgArtMask.src = "data/borders/" + document.getElementById("borderSelection").value + "artMask.png"
+	imgMultiMask.src = "data/borders/" + document.getElementById("borderSelection").value + "multiMask.png"
 	updateColor()
 }
+//Loads the images for the card frame, power toughness box, and rare stamp
 function updateColor() {
-	borderPath = "data/borders/" + document.getElementById("borderSelection").value + document.getElementById("colorSelection").value
-	imgBorderColor.src = borderPath + "/frame.png"
-	imgBorderCreature.src = borderPath + "/pt.png"
+	borderPath = "data/borders/" + document.getElementById("borderSelection").value
+	imgBorderColor.src = borderPath + document.getElementById("colorSelection").value + "/frame.png"
+	imgSecondBorderColor.src = borderPath + document.getElementById("secondColorSelection").value + "/frame.png"
+	imgThirdBorderColor.src = borderPath + document.getElementById("thirdColorSelection").value + "/frame.png"
+	imgBorderCreature.src = borderPath + document.getElementById("colorSelection").value + "/pt.png"
+	imgSecondBorderCreature.src = borderPath + document.getElementById("secondColorSelection").value + "/pt.png"
+	imgThirdBorderCreature.src = borderPath + document.getElementById("thirdColorSelection").value + "/pt.png"
 	if (m15Info == true) {
-		imgBorderLegendary.src = borderPath + "/legendary.png"
-		imgBorderRareStamp.src = borderPath + "/stamp.png"
+		imgBorderLegendary.src = borderPath + document.getElementById("colorSelection").value + "/legendary.png"
+		imgSecondBorderLegendary.src = borderPath + document.getElementById("secondColorSelection").value + "/legendary.png"
+		imgThirdBorderLegendary.src = borderPath + document.getElementById("thirdColorSelection").value + "/legendary.png"
+		imgBorderRareStamp.src = borderPath + document.getElementById("colorSelection").value + "/stamp.png"
+		imgSecondBorderRareStamp.src = borderPath + document.getElementById("secondColorSelection").value + "/stamp.png"
 	}
 }
-//Draw Border
-function drawBorder() {
-	drawMask(imgBorderColor, 0, 0, canvas.width, canvas.height, imgArtMask)
-	if (m15Info == true) {
-		if (document.getElementById("legendaryCheckbox").checked == true && imgBorderLegendary.width != 0) {
-			card.drawImage(imgBorderLegendary, 0, 0, canvas.width, canvas.height)
-		}
-		if (document.getElementById("rareStampCheckbox").checked == true) {
-			if (imgBorderRareStamp.width != 0) {
-				card.drawImage(imgBorderRareStamp, 329, rareStampY - 15, 90, 50)
-			}
-			card.drawImage(imgBorderStampHolo, 340, rareStampY, 70, 37)
-		}
-	}
-}
-
-
 //Draw Picture
 function drawPicture() {
+	//scales the card art and draws it
 	var imageScale = document.getElementById("imageSize").value * 0.01
 	var imageLeftShift = parseInt(document.getElementById("imageLeft").value)
 	var imageUpShift = parseInt(document.getElementById("imageUp").value)
 	card.drawImage(imgArt, 58 - imageLeftShift, 119 - imageUpShift, imgArt.width * imageScale, imgArt.height * imageScale)
 }
-
+//Draw Border
+function drawBorder() {
+	//These if else statements check to see whether or not to draw different parts of the card, like the legendary border or rare stamp, and draws them in the appropriate order such that when multiple border colors are used the gradients overlap correctly
+	drawMask(imgBorderColor, 0, 0, canvas.width, canvas.height, imgArtMask, false, false)
+	if (document.getElementById("checkboxSecondColor").checked == true) {
+		drawMask(imgSecondBorderColor, 0, 0, canvas.width, canvas.height, imgArtMask, imgMultiGradient, "reverseSecond")
+	}
+	if (document.getElementById("checkboxThirdColor").checked == true) {
+		drawMask(imgThirdBorderColor, 0, 0, canvas.width, canvas.height, imgMultiMask, imgArtMask, false)
+		if (document.getElementById("legendaryCheckbox").checked == true && imgBorderLegendary.width != 0) {
+			drawMask(imgThirdBorderLegendary, 0, 0, canvas.width, canvas.height, imgArtMask, false, false)
+		}
+	}
+	if (m15Info == true) {
+		if (document.getElementById("legendaryCheckbox").checked == true && imgBorderLegendary.width != 0) {
+			card.drawImage(imgBorderLegendary, 0, 0, canvas.width, canvas.height)
+			if (document.getElementById("checkboxSecondColor").checked == true && imgBorderLegendary.width != 0) {
+				drawMask(imgSecondBorderLegendary, 0, 0, canvas.width, canvas.height, imgArtMask, imgMultiGradient, "reverseSecond")
+			}
+		}
+		if (document.getElementById("rareStampCheckbox").checked == true) {
+			if (imgBorderRareStamp.width != 0) {
+				card.drawImage(imgBorderRareStamp, 329, rareStampY - 15, 90, 50)
+				if (document.getElementById("checkboxSecondColor").checked == true) {
+					drawMask(imgSecondBorderRareStamp, 329, rareStampY - 15, 90, 50, imgSecondBorderRareStamp, imgStampGradient, "reverseSecond")
+				}
+			}
+			card.drawImage(imgRareStamp, 340, rareStampY, 70, 37)
+		}
+	}
+}
 //Draw Set Symbol
 function drawSetSymbol() {
+	//scales the set symbol so that it fits in the correct area and centers it
 	if (imgSetSymbol.src != "" && document.getElementById("setSymbolCheckbox").checked == true) {
 		var height = setSymbolHeight
 		var width = imgSetSymbol.width * (height / imgSetSymbol.height)
@@ -319,9 +354,9 @@ function drawSetSymbol() {
 		card.drawImage(imgSetSymbol, x, y, width, height)
 	}
 }
-
 //Draw Watermark
 function drawWatermark() {
+	//The watermark is centered/scaled just like the set symbol
 	if (imgWatermark.src != "" && document.getElementById("watermarkCheckbox").checked == true) {
 		var height = watermarkHeight
 		var width = imgWatermark.width * (height / imgWatermark.height)
@@ -331,40 +366,37 @@ function drawWatermark() {
 		}
 		var x = canvas.width / 2 - width / 2
 		var y = watermarkY - height / 2
-		//Tint Watermark
-	    var c = document.createElement("canvas")
-	    var cctx = c.getContext("2d")
-	    c.width = width
-	    c.height = height
-	    cctx.globalCompositeOperation = "source-over";
-	    cctx.drawImage(imgWatermark, 0, 0, width, height);
-	    cctx.globalCompositeOperation = "source-atop";
-	    cctx.fillStyle = document.getElementById("watermarkColorSelection").value
-	    cctx.fillRect(0,0,width,height);
-	    card.globalAlpha = 0.4
-	    card.drawImage(c, x, y, width, height);
+		//globalAlpha insures that the watermark is drawn partially transparent. This value may not be perfect but the watermark colors are calibrated to it
+		card.globalAlpha = 0.4
+	    //if the following if statement is true, the watermark will be drawn in two halves of the chosen colors. Otherwise, a single watermark of the first chosen color is drawn.
+	    if (document.getElementById("checkboxSecondWatermarkColor").checked == true) {
+	    	drawMask(document.getElementById("watermarkColorSelection").value, x, y, width, height, imgWatermark, imgMultiGradient, false)
+	    	drawMask(document.getElementById("secondWatermarkColorSelection").value, x, y, width, height, imgWatermark, imgMultiGradient, "reverseSecond")
+	    } else {
+	    	drawMask(document.getElementById("watermarkColorSelection").value, x, y, width, height, imgWatermark, false, false)
+	    }
 	    card.globalAlpha = 1
 	}
 }
-
 //Mana cost
 function drawManaCost() {
+	//the symbols string splits the mana cost input into an array of strings which is then put into a for loop that draws the appropriate set symbol then adjusts the xShift so the set symbols are spaced properly
 	card.fillStyle = "Black"
 	var symbols = document.getElementById("inputCost").value.split(" ")
 	var xShift = 0
 	for (n = symbols.length; n > -1; n--) {
 		if (manaSymbolCode.indexOf(symbols[n]) != -1) {
-		card.beginPath()
-		card.arc(manaCostX + xShift + manaCostRadius - 1, manaCostY + manaCostRadius + 3.5, manaCostRadius, 0, 6.29, false)
-		card.fill()
-		card.drawImage(manaSymbolImages[manaSymbolCode.indexOf(symbols[n])], manaCostX + xShift, manaCostY, manaCostRadius * 2, manaCostRadius * 2)
-		xShift -= 39
+			card.beginPath()
+			card.arc(manaCostX + xShift + manaCostRadius - 1, manaCostY + manaCostRadius + 3.5, manaCostRadius, 0, 6.29, false)
+			card.fill()
+			card.drawImage(manaSymbolImages[manaSymbolCode.indexOf(symbols[n])], manaCostX + xShift, manaCostY, manaCostRadius * 2, manaCostRadius * 2)
+			xShift -= 39
+		}
 	}
 }
-}
-
 //Write Text
 function writeText() {
+	//Draws the entered text onto the card, also draws the power/toughness box if necessary
 	//All use these:
 	card.textBaseline = "top"
 	card.fillStyle = "Black"
@@ -372,28 +404,30 @@ function writeText() {
 	canvas.style.letterSpacing = titleFontSpacing
 	card.font = titleFont	
 	card.fillText(document.getElementById("inputName").value, titleX, titleY)
-
 	//Type
 	canvas.style.letterSpacing = typeFontSpacing
 	card.font = typeFont
 	card.fillText(document.getElementById("inputType").value, typeX, typeY)
-
 	//Rules Text
 	canvas.style.letterSpacing = textFontSpacing + "px"
 	card.font = document.getElementById("textSize").value + textFont
 	var text = document.getElementById("inputText").value
 	rulesText(text, textX, textY)
-
 	//Power/Toughness
 	if (document.getElementById("creatureCheckbox").checked == true) {
-		card.drawImage(imgBorderCreature, ptX, ptY, ptWidth, ptHeight)
+		if (document.getElementById("checkboxThirdColor").checked == true) {
+			card.drawImage(imgThirdBorderCreature, ptX, ptY, ptWidth, ptHeight)
+		} else if (document.getElementById("checkboxSecondColor").checked == true) {
+			card.drawImage(imgSecondBorderCreature, ptX, ptY, ptWidth, ptHeight)
+		} else {
+			card.drawImage(imgBorderCreature, ptX, ptY, ptWidth, ptHeight)
+		}
 		canvas.style.letterSpacing = ptFontSpacing
 		card.font = ptFont
 		powerToughness = document.getElementById("inputPowerToughness").value
 		card.fillText(powerToughness, ptTextX - (card.measureText(powerToughness).width / 2), ptTextY)
 	}
 }
-
 //Bottom info on M15 cards
 function bottomInfoM15() {
 	card.fillStyle = "white"
@@ -433,11 +467,9 @@ function bottomInfo8th() {
 	card.fillText("KCI —" + document.getElementById("inputInfo").value + " " + document.getElementById("inputNumber").value, 62, eighthInfoY + 31)
 }
 
-
-
-
 //Write rules and flavor text
 function rulesText(text, x, y) {
+	//This uses a long series of if/else statements to process the entered text (after its split into an array). It writes the rules text line by line taking into accounts symbols, line breaks, and italicized text
 	var paragraphShift = parseInt(document.getElementById("textShift").value, 10)
 	var paragraphDown = parseInt(document.getElementById("textDown").value, 10)
 	var words = (text + " ").split(" ")
@@ -509,14 +541,14 @@ function rulesText(text, x, y) {
 				//Word fits
 				line = testLine + " "
 				if (n + 1 == words.length) {
-				card.fillText(line, x + xShift, y)
+					card.fillText(line, x + xShift, y)
 				}
 			}
 		}
 	}
 }
 
-
+//Just a series of alerts that explains how to use the program
 function howTo() {
 	window.alert("First, select a border, a color, and select whether or not you want to include a Power/Toughness, Legendary Border, Rare Stamp, or Foil Overlay.")
 	window.alert("Then, fill in all the details such as the card name, type, text, etc...")

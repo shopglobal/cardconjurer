@@ -44,3 +44,5 @@ var watermarkY = 805
 var rareStampY = 958
 
 loadColors("white-White,whiteLand-White Land,blue-Blue,blueLand-Blue Land,black-Black,blackLand-Black Land,red-Red,redLand-Red Land,green-Green,greenLand-Green Land,gold-Gold,goldLand-Gold Land,colorless-Colorless,colorlessLand-Colorless Land,artifact-Artifact")
+document.getElementById("secondColorSelection").innerHTML = document.getElementById("colorSelection").innerHTML
+document.getElementById("thirdColorSelection").innerHTML = document.getElementById("colorSelection").innerHTML
