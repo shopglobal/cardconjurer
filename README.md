@@ -1,6 +1,8 @@
 # Kyles-Card-Imager
 To install KCI, download the file titled 'KCI' and open it. (make sure it's not zipped!) Then double click (to run) the html file.
 
+<img src="sampleCards/sample-card-1.png" alt="alt text" width="200" height="200">
+
 ![alt text](sampleCards/sample-card-1.png)
 
 
