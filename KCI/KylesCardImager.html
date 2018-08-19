@@ -215,7 +215,7 @@ var m15Info = true
 var canvas = document.getElementById("canvas")
 var card = canvas.getContext("2d")
 //Load dynamic images
-var dynamicImageList = ["borderColor", "secondBorderColor", "thirdBorderColor", "borderCreature", "secondBorderCreature", "thirdBorderCreature", "borderLegendary", "secondBorderLegendary", "thirdBorderLegendary", "borderRareStamp", "secondBorderRareStamp", "art", "artMask", "setSymbol", "watermark", "multiMask"]
+var dynamicImageList = ["borderColor", "secondBorderColor", "thirdBorderColor", "borderCreature", "secondBorderCreature", "thirdBorderCreature", "borderLegendary", "secondBorderLegendary", "thirdBorderLegendary", "borderRareStamp", "secondBorderRareStamp", "art", "artMask", "setSymbol", "watermark", "multiMask", "LegendMultiMask"]
 for (i = 0; i < dynamicImageList.length; i ++) {
 	var imgName = "img" + dynamicImageList[i].charAt(0).toUpperCase() + dynamicImageList[i].slice(1)
 	window[imgName] = new Image()
@@ -285,6 +285,7 @@ function updateBorder() {
 	document.getElementById("colorSelection").value = "white"
 	imgArtMask.src = "data/borders/" + document.getElementById("borderSelection").value + "artMask.png"
 	imgMultiMask.src = "data/borders/" + document.getElementById("borderSelection").value + "multiMask.png"
+	imgLegendMultiMask.src = "data/borders/" + document.getElementById("borderSelection").value + "legendMultiMask.png"
 	updateColor()
 }
 //Loads the images for the card frame, power toughness box, and rare stamp
@@ -321,15 +322,15 @@ function drawBorder() {
 	}
 	if (document.getElementById("checkboxThirdColor").checked == true) {
 		drawMask(imgThirdBorderColor, 0, 0, canvas.width, canvas.height, imgMultiMask, imgArtMask, false)
-		if (document.getElementById("legendaryCheckbox").checked == true && imgBorderLegendary.width != 0) {
-			drawMask(imgThirdBorderLegendary, 0, 0, canvas.width, canvas.height, imgArtMask, false, false)
-		}
 	}
 	if (m15Info == true) {
 		if (document.getElementById("legendaryCheckbox").checked == true && imgBorderLegendary.width != 0) {
 			card.drawImage(imgBorderLegendary, 0, 0, canvas.width, canvas.height)
 			if (document.getElementById("checkboxSecondColor").checked == true && imgBorderLegendary.width != 0) {
 				drawMask(imgSecondBorderLegendary, 0, 0, canvas.width, canvas.height, imgArtMask, imgMultiGradient, "reverseSecond")
+			}
+			if (document.getElementById("checkboxThirdColor").checked == true) {
+				drawMask(imgThirdBorderColor, 0, 0, canvas.width, canvas.height, imgLegendMultiMask, imgArtMask, false)
 			}
 		}
 		if (document.getElementById("rareStampCheckbox").checked == true) {
