@@ -1,5 +1,5 @@
 # Kyles-Card-Imager
-To install KCI, download the file titled 'KCI' and open it. (make sure it's not zipped!) Then double click (to run) the html file.
+To install KCI, click the green button that says "clone or download"
 
 
 [![Donate](https://img.shields.io/badge/Donate-PayPal-blue.svg?longCache=true&style=popout)](https://www.paypal.me/kyleburtondonate
