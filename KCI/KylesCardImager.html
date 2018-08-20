@@ -6,100 +6,120 @@
 	<script src="data/scripts/loadImage.js"></script>
 	<script src="data/scripts/loadColors.js"></script>
 	<script src="data/scripts/mask.js"></script>
-	<div id="title">Kyle's Card Imager</div>
+	<div class="title">Kyle's Card Imager</div>
 </head>
 <body>
-	<canvas id="canvas" width="749" height="1044"></canvas>
+	<div class="row">
+	<div class="column"><canvas id="canvas" width="749" height="1044"></canvas></div>
 	<!--OPTIONS-->
-	<button onclick="howTo()" class="button">How To Use KCI</button>
-	<br><br>
-	<div class="wrapper">
+	<div class="column">
+	<br>
+	<div class="toggle" onclick="toggleVisibility('cardBorder', this, 'toggleShown', 'hidden', 'shown')">Card Border</div>
+	<div class="cardBorder hidden">
 		Border
 		<select id="borderSelection" onchange="updateBorder()">
 			<option value="m15/">M15</option>
 			<option value="8th/">8th</option>
 		</select>
-		<br>
+		<br/>
 		Color
 		<select id="colorSelection" onchange="updateColor()">
 			<option value="white">White</option>
 		</select>
-		<br>
+		<br/>
 		<input type="checkbox" id="checkboxSecondColor" onchange="updateColor()">Second Color <select id="secondColorSelection" onchange="updateColor()"></select></input>
-		<br>
+		<br/>
 		<input type="checkbox" id="checkboxThirdColor" onchange="updateColor()">Third Color <select id="thirdColorSelection" onchange="updateColor()"></select></input>
-		<br>
+		<br/>
 		<input type="checkbox" id="creatureCheckbox" onchange="updateColor()">Power/Toughness
 		<input id="inputPowerToughness" value=""></input></input>
-		<br>
+		<br/>
 		<input type="checkbox" id="legendaryCheckbox" onchange="updateColor()">Legendary</input>
-		<br>
+		<br/>
 		<input type="checkbox" id="rareStampCheckbox" onchange="updateColor()">Rare Stamp</input>
-		<br>
+		<br/>
 		<input type="checkbox" id="foilCheckbox">Foil</input>
-		<br><br>
+		<br/>
+	</div>
+	<div class="toggle" onclick="toggleVisibility('nameCostType', this, 'toggleShown', 'hidden', 'shown')">Name, Mana Cost, Type</div>
+	<div class="nameCostType hidden">
 		Name
 		<input id="inputName"></input>
-		<br>
+		<br/>
 		Mana Cost
 		<input id="inputCost"></input>
-		<br>
+		<br/>
 		Type
 		<input id="inputType"></input>
-		<br><br>
+		<br/>
+	</div>
+	<div class="toggle" onclick="toggleVisibility('rulesText', this, 'toggleShown', 'hidden', 'shown')">Rules Text</div>
+	<div class="rulesText hidden">
 		Rules Text
-		<br>
+		<br/>
 		<textarea id="inputText" rows="5" cols="40"></textarea>
-		<br>
+		<br/>
 		Rules Text Font Size
-		<input id="textSize" type="number" min="30" max="38" value="37" step="1"></input>
-		<br>
+		<input id="textSize" type="number" min="0" max="100" value="37" step="0.5"></input>
+		<br/>
 		Pixels Between Paragraphs
 		<input id="textShift" type="number" min="0" max="300" value="0"></input>
-		<br>
+		<br/>
 		Shift All Text Down
 		<input id="textDown" type="number" min="0" max="300" value="0"></input>
-		<br><br>
+		<br/>
+	</div>
+	<div class="toggle" onclick="toggleVisibility('cardArt', this, 'toggleShown', 'hidden', 'shown')">Card Art</div>
+	<div class="cardArt hidden">
 		Image
 		<input type="file" accept="image/*" onchange="loadImage(event, imgArt, true)" id="inputPicture"></input>
-		<br>
+		<br/>
 		Image Zoom
 		<input id="imageSize" type="number" value="100" step="0.1"></input>
-		<br>
+		<br/>
 		Image Left
 		<input id="imageLeft" type="number" value="0" step="1"></input>
-		<br>
+		<br/>
 		Image Up
 		<input id="imageUp" type="number" value="0" step="1"></input>
-		<br><br>
+		<br/>
+	</div>
+	<div class="toggle" onclick="toggleVisibility('otherInfo', this, 'toggleShown', 'hidden', 'shown')">Other Information</div>
+	<div class="otherInfo hidden">
 		Other Info
 		<input id="inputInfo" value="Not A Real Card"></input>
-		<br>
+		<br/>
 		Card Number
 		<input id="inputNumber" value="001/001"></input>
-		<br>
+		<br/>
 		Rarity
 		<input id="inputRarity" value="C"></input>
-		<br>
+		<br/>
 		Set Abbreviation
 		<input id="inputSet" value="MTG"></input>
-		<br>
+		<br/>
 		Language
 		<input id="inputLanguage" value="EN"></input>
-		<br>
+		<br/>
 		Artist Credit
 		<input id="inputArtist" value=""></input>
-		<br>
+		<br/>
 		<input id="artistColor" type="checkbox">Make Artist Credit font black</input>
-		<br><br>
+		<br/>
+	</div>
+	<div class="toggle" onclick="toggleVisibility('setSymbolWatermark', this, 'toggleShown', 'hidden', 'shown')">Set Symbol and Watermark</div>
+	<div class="setSymbolWatermark hidden">
 		<input type="checkbox" id="setSymbolCheckbox" checked="true"></input>
 		Set Symbol
 		<input type="file" accept="image/*" onchange="loadImage(event, imgSetSymbol, true)" id="inputSetSymbol"></input>
-		<br><br>
+		<br/>
+		Scale Set Symbol
+		<input id="setSymbolSize" type="number" value="100" step="0.5"></input>
+		<br/><br/>
 		<input type="checkbox" id="watermarkCheckbox" checked="true"></input>
 		Watermark
 		<input type="file" accept="image/*" onchange="loadImage(event, imgWatermark, true)" id="inputWatermark"></input>
-		<br>
+		<br/>
 		Watermark Color
 		<select id="watermarkColorSelection">
 			<option value="#afa360">White</option>
@@ -110,11 +130,13 @@
 			<option value="#7f5f00">Gold</option>
 			<option value="#616b72">Artifact/Colorless</option>
 		</select>
-		<br>
+		<br/>
 		<input type="checkbox" id="checkboxSecondWatermarkColor"> Second Watermark Color <select id="secondWatermarkColorSelection"></select></input>
+		<br/>
 	</div>
-	<br>
-	<div id="info">For Terms of Use and Disclaimer, see <a href="https://github.com/ImKyle4815/Kyles-Card-Imager" target="_blank">the Github page</a>.</div>
+</div>
+</div>
+	<div class="info">For Terms of Use and Disclaimer, see <a href="https://github.com/ImKyle4815/Kyles-Card-Imager" target="_blank">the Github page</a>.</div>
 </body>
 
 
@@ -153,33 +175,62 @@
 	font-family: mplantini;
 	src: url("data/fonts/mplantin-i.ttf");
 }
-button {
-	color: rgb(128,255,128);
-	font-family: belerenbsc;
-	font-size: 20px;
-	background-color: rgb(96,96,96);
-}
-.wrapper * {
-	color: rgb(255,255,255);
-	font-family: mplantin;
-	font-size: 18px;
-	background-color: rgb(96,96,96);
-}
-#title {
+.title {
 	text-align: center;
 	color: rgb(128,255,128);
 	font-family: belerenbsc;
 	font-size: 60px;
 }
-#info {
+.info {
 	text-align: center;
 	color: rgb(96,96,96);
 	font-family: belerenbsc;
 	font-size: 16px;
 }
+.toggle {
+	text-align: center;
+	color: rgb(255, 255, 255);
+	font-family: belerenbsc;
+	font-size: 20px;
+	width: 408px;
+	padding: 5px;
+	border: 1px solid rgb(128, 255, 128);
+}
+.toggle:hover {
+	color: rgb(128, 255, 128);
+}
+.toggleShown {
+	color: rgb(128, 255, 128);
+	border-color: rgb(128, 255, 128);
+	border-style: solid solid hidden solid;
+}
+.hidden {
+	display: none;
+	font-size: 100px;
+}
+.shown {
+	padding: 5px;
+	border-width: 1px;
+	border-color: rgb(128, 255, 128);
+	border-style: dashed solid solid solid;
+}
+}
+.shown * {
+	color: rgb(255,255,255);
+	font-family: mplantin;
+	font-size: 15px;
+}
+.column {
+	float: left;
+}
+.row:after{
+	content: "";
+	display: table;
+	clear: both;
+}
 body {
 	color: rgb(255,255,255);
-	font-family: belerenbsc;
+	font-family: mplantin;
 	font-size: 18px;
 	background-color: rgb(56,56,56);
 }
@@ -354,6 +405,8 @@ function drawSetSymbol() {
 			width = setSymbolWidth
 			height = imgSetSymbol.height * (width / imgSetSymbol.width)
 		}
+		height *= document.getElementById("setSymbolSize").value / 100
+		width *= document.getElementById("setSymbolSize").value / 100
 		var y = setSymbolY - height / 2
 		var x = setSymbolRight - width
 		card.drawImage(imgSetSymbol, x, y, width, height)
@@ -435,6 +488,7 @@ function writeText() {
 }
 //Bottom info on M15 cards
 function bottomInfoM15() {
+	var shiftInfo = 445
 	card.fillStyle = "white"
 	canvas.style.letterSpacing = "0.8px"
 	card.font = "19.5px relaymedium"
@@ -446,15 +500,24 @@ function bottomInfoM15() {
 	card.font = "19.5px relaymedium"
 	card.fillText(document.getElementById("inputNumber").value, 49, m15InfoY - 20)
 	card.fillText(document.getElementById("inputRarity").value, artistBrushShift - 1, m15InfoY - 20)
+	if (445 < artistBrushShift  + card.measureText(document.getElementById("inputRarity").value).width && document.getElementById("creatureCheckbox").checked == false) {
+		shiftInfo = artistBrushShift  + card.measureText(document.getElementById("inputRarity").value).width + 5
+	}
 	canvas.style.letterSpacing = "-0.1px"
 	card.font = "24px matrixbsc"
 	card.fillText(document.getElementById("inputArtist").value, artistBrushShift + 21, m15InfoY + 2)
-	canvas.style.letterSpacing = "0px"
-	card.font = "17px mplantin"
-	if (document.getElementById("creatureCheckbox").checked == true) {
-		card.fillText("KCI — " + document.getElementById("inputInfo").value, 445, m15InfoY)
-	} else {
-		card.fillText("KCI — " + document.getElementById("inputInfo").value, 445, m15InfoY - 18)
+	if (445 < artistBrushShift + 21 + card.measureText(document.getElementById("inputArtist").value).width && document.getElementById("creatureCheckbox").checked == true) {
+		shiftInfo = artistBrushShift + card.measureText(document.getElementById("inputArtist").value).width + 26
+	}
+	//This is where "KCI —" is hardcoded. The only reason is to prevent users from easily typing in the trademark and copyright that's usually on real cards. It's also there so I can see if a card was created with my program, it makes me feel good :)
+	if (document.getElementById("inputInfo").value != "") {
+		canvas.style.letterSpacing = "0px"
+		card.font = "17px mplantin"
+		if (document.getElementById("creatureCheckbox").checked == true) {
+			card.fillText("KCI — " + document.getElementById("inputInfo").value, shiftInfo, m15InfoY + 3)
+		} else {
+			card.fillText("KCI — " + document.getElementById("inputInfo").value, shiftInfo, m15InfoY - 17)
+		}
 	}
 }
 //Bottom info on 8th edition cards
@@ -553,16 +616,18 @@ function rulesText(text, x, y) {
 	}
 }
 
-//Just a series of alerts that explains how to use the program
-function howTo() {
-	window.alert("First, select a border, a color, and select whether or not you want to include a Power/Toughness, Legendary Border, Rare Stamp, or Foil Overlay.")
-	window.alert("Then, fill in all the details such as the card name, type, text, etc...")
-	window.alert("When typing in the mana cost use the following format: '3 g u'")
-	window.alert("The symbols are labeled w u b r g, add a prefix of 'p' for phyrexian mana, or a prefix of '2' for colorless hybrid mana. For regular hybrid mana, make sure to use the correct order. For example, 'gu' is correct for Green/Blue hybrid mana while 'ug' is incorrect. You can also use numbers 0-20, 'c' for colorless (diamond) mana, 't' for tap, 'untap' for untap, 'e' for energy, and 'snow' for snow mana.")
-	window.alert("the same codes used in the mana cost are also used in the rules text. Just put a '<' before each code and a '>' after each code. For example, '<3><pg><t>' would display the three mana symbol, the phyrexian green mana symbol, and the tap symbol. In addition to mana symbols, you can use '<i>' to start italicized text and '</i>' to end it. '<line>' will skip to the next line and allow for extra spacing when you increase the Pixels Between Paragraphs, and '<lineNoSpace>' will ignore the Pixels Between Paragraphs. These other codes require a space (' ') before and after the carrots. ('<' and '>')")
-	window.alert("To upload the card image, the set symbol, or the watermark, click the associated 'Choose File' button and navigate to your desired image. Below the Image selector, you may adjust the Zoom, Left, and Up values to scale or move the card image. If you upload your own set symbols or watermarks, it is recommended that you crop these images have transparent backgrounds and are cropped sufficiently.")
-	window.alert("Remember to properly credit any artwork that you upload!")
-	window.alert("Thank you for using Kyle's Card Imager, remember that all this code is free but donations are greatly appreciated!")
+//Toggles the visibility of predetermined sections of the input boxes
+function toggleVisibility(targetClass, self, selfClass, hiddenClass, shownClass) {
+	var alreadyShown = document.getElementsByClassName(selfClass)
+	if (alreadyShown.length >= 1 && alreadyShown[0] != self) {
+		alreadyShown[0].click()
+	}
+	self.classList.toggle(selfClass)
+	var elementList = document.getElementsByClassName(targetClass)
+	for (i = 0; i < elementList.length; i ++) {
+		elementList[i].classList.toggle(hiddenClass)
+		elementList[i].classList.toggle(shownClass)
+	}
 }
 </script>
 <html>
