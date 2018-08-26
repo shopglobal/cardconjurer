@@ -520,7 +520,7 @@ function drawBorder() {
 	if(document.getElementById("legendaryCheckbox").checked == true) {
 		card.drawImage(imgBorderEdge, 0, 0, canvas.width, canvas.height)
 		if (document.getElementById("silverBorderCheckbox").checked == true) {
-			drawMask(imgLegendSilver, 0, 0, canvas.width, canvas.height, imgCardMask, imgLegendMultiMask, false)
+			drawMask(imgLegendSilver, 0, 0, canvas.width, canvas.height, imgCardMask, false, false)
 		}
 	} else {
 		card.drawImage(imgBorderEdge, 0, 0, canvas.width, canvas.height)
