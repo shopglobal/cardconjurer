@@ -1,141 +1,228 @@
 <!DOCTYPE HTML>
 <html>
 <head>
-	<title>Kyle's Card Imager</title>
+	<title>Card Conjurer</title>
 	<script src="data/scripts/loadScript.js"></script>
 	<script src="data/scripts/loadImage.js"></script>
 	<script src="data/scripts/loadColors.js"></script>
 	<script src="data/scripts/mask.js"></script>
-	<div class="title">Kyle's Card Imager</div>
+	<div class="title">Card Conjurer</div>
 </head>
+<!-- <img src="data/background.png"></img> -->
 <body>
 	<div class="row">
-	<div class="column"><canvas id="canvas" width="749" height="1044"></canvas></div>
-	<!--OPTIONS-->
-	<div class="column">
-	<br>
-	<div class="toggle" onclick="toggleVisibility('cardBorder', this, 'toggleShown', 'hidden', 'shown')">Card Border</div>
-	<div class="cardBorder hidden">
-		Border
-		<select id="borderSelection" onchange="updateBorder()">
-			<option value="m15/">M15</option>
-			<option value="8th/">8th</option>
-		</select>
-		<br/>
-		Color
-		<select id="colorSelection" onchange="updateColor()">
-			<option value="white">White</option>
-		</select>
-		<br/>
-		<input type="checkbox" id="checkboxSecondColor" onchange="updateColor()">Second Color <select id="secondColorSelection" onchange="updateColor()"></select></input>
-		<br/>
-		<input type="checkbox" id="checkboxThirdColor" onchange="updateColor()">Third Color <select id="thirdColorSelection" onchange="updateColor()"></select></input>
-		<br/>
-		<input type="checkbox" id="creatureCheckbox" onchange="updateColor()">Power/Toughness
-		<input id="inputPowerToughness" value=""></input></input>
-		<br/>
-		<input type="checkbox" id="legendaryCheckbox" onchange="updateColor()">Legendary</input>
-		<br/>
-		<input type="checkbox" id="rareStampCheckbox" onchange="updateColor()">Rare Stamp</input>
-		<br/>
-		<input type="checkbox" id="foilCheckbox">Foil</input>
-		<br/>
+		<div class="column"><canvas id="canvas" width="749" height="1044"></canvas></div>
+		<!--OPTIONS-->
+		<div class="column">
+			<br/>
+			<div style="width: 375px">
+				<div class="toggle" onclick="toggleVisibility('cardBorder', this, 'toggleShown', 'hidden', 'shown')">Card Border</div>
+				<div class="cardBorder hidden">
+					Border
+					<select id="borderSelection" onchange="updateBorder()">
+						<option value="m15/">M15</option>
+						<option value="8th/">8th</option>
+					</select>
+					<br/>
+					Color
+					<select id="colorSelection" onchange="updateColor()">
+						<option value="white">White</option>
+					</select>
+					<br/>
+					<input type="checkbox" id="checkboxSecondColor" onchange="updateColor()">Second Color <select id="secondColorSelection" onchange="updateColor()"></select></input>
+					<br/>
+					<input type="checkbox" id="checkboxThirdColor" onchange="updateColor()">Third Color <select id="thirdColorSelection" onchange="updateColor()"></select></input>
+					<br/>
+					<input type="checkbox" id="creatureCheckbox" onchange="updateColor()">Power/Toughness
+					<input id="inputPowerToughness" value="" type="text"></input>
+					<br/>
+					<input type="checkbox" id="legendaryCheckbox" onchange="updateColor()">Legendary</input>
+					<br/>
+					<input type="checkbox" id="rareStampCheckbox" onchange="updateColor()">Rare Stamp</input>
+					<br/>
+					<input type="checkbox" id="silverBorderCheckbox">Silver Border</input>
+					<br/>
+					<input type="checkbox" id="foilCheckbox">Foil</input>
+					<br/>
+				</div>
+				<div class="toggle" onclick="toggleVisibility('nameCostType', this, 'toggleShown', 'hidden', 'shown')">Name, Mana Cost, Type</div>
+				<div class="nameCostType hidden">
+					Name
+					<input id="inputName" type="text"></input>
+					<br/>
+					Mana Cost
+					<input id="inputCost" type="text"></input>
+					<br/>
+					Type
+					<input id="inputType" type="text"></input>
+					<br/>
+				</div>
+				<div class="toggle" onclick="toggleVisibility('rulesText', this, 'toggleShown', 'hidden', 'shown')">Rules Text</div>
+				<div class="rulesText hidden">
+					Rules Text
+					<br/>
+					<textarea id="inputText" rows="5" cols="40" style="width: 99%; resize: vertical; height: 100px"></textarea>
+					<br/>
+					Rules Text Font Size
+					<input id="textSize" type="number" min="0" max="100" value="37" step="0.5"></input>
+					<br/>
+					Pixels Between Paragraphs
+					<input id="textShift" type="number" min="0" max="300" value="0"></input>
+					<br/>
+					Shift All Text Down
+					<input id="textDown" type="number" min="0" max="300" value="0"></input>
+					<br/>
+				</div>
+				<div class="toggle" onclick="toggleVisibility('cardArt', this, 'toggleShown', 'hidden', 'shown')">Card Art</div>
+				<div class="cardArt hidden">
+					Image
+					<input type="file" accept="image/*" onchange="loadImage(event, imgArt, true)" id="inputPicture"></input>
+					<br/>
+					Image Zoom
+					<input id="imageSize" type="number" value="100" step="0.1"></input>
+					<br/>
+					Image Left
+					<input id="imageLeft" type="number" value="0" step="1"></input>
+					<br/>
+					Image Up
+					<input id="imageUp" type="number" value="0" step="1"></input>
+					<br/>
+				</div>
+				<div class="toggle" onclick="toggleVisibility('otherInfo', this, 'toggleShown', 'hidden', 'shown')">Other Information</div>
+				<div class="otherInfo hidden">
+					Other Info
+					<input id="inputInfo" value="Not A Real Card" type="text"></input>
+					<br/>
+					Card Number
+					<input id="inputNumber" value="001/001" type="text"></input>
+					<br/>
+					Rarity
+					<input id="inputRarity" value="C" type="text"></input>
+					<br/>
+					Set Abbreviation
+					<input id="inputSet" value="MTG" type="text"></input>
+					<br/>
+					Language
+					<input id="inputLanguage" value="EN" type="text"></input>
+					<br/>
+					Artist Credit
+					<input id="inputArtist" value="" type="text"></input>
+					<br/>
+					<input id="artistColor" type="checkbox">Make Artist Credit font black</input>
+					<br/>
+				</div>
+				<div class="toggle" onclick="toggleVisibility('setSymbolWatermark', this, 'toggleShown', 'hidden', 'shown')">Set Symbol and Watermark</div>
+				<div class="setSymbolWatermark hidden">
+					<input type="checkbox" id="setSymbolCheckbox" checked="true"></input>
+					Set Symbol
+					<input type="file" accept="image/*" onchange="loadImage(event, imgSetSymbol, true)" id="inputSetSymbol"></input>
+					<br/>
+					Scale Set Symbol
+					<input id="setSymbolSize" type="number" value="100" step="0.5"></input>
+					<br/><br/>
+					<input type="checkbox" id="watermarkCheckbox" checked="true"></input>
+					Watermark
+					<input type="file" accept="image/*" onchange="loadImage(event, imgWatermark, true)" id="inputWatermark"></input>
+					<br/>
+					Watermark Color
+					<select id="watermarkColorSelection">
+						<option value="#afa360">White</option>
+						<option value="#04527c">Blue</option>
+						<option value="#494949">Black</option>
+						<option value="#a3280d">Red</option>
+						<option value="#0f4f14">Green</option>
+						<option value="#7f5f00">Gold</option>
+						<option value="#616b72">Artifact/Colorless</option>
+					</select>
+					<br/>
+					<input type="checkbox" id="checkboxSecondWatermarkColor"> Second Watermark Color <select id="secondWatermarkColorSelection"></select></input>
+					<br/>
+				</div>
+			</div>
+		</div>
 	</div>
-	<div class="toggle" onclick="toggleVisibility('nameCostType', this, 'toggleShown', 'hidden', 'shown')">Name, Mana Cost, Type</div>
-	<div class="nameCostType hidden">
-		Name
-		<input id="inputName"></input>
-		<br/>
-		Mana Cost
-		<input id="inputCost"></input>
-		<br/>
-		Type
-		<input id="inputType"></input>
-		<br/>
+	<div class="row text">
+		Use the following codes to get the respective symbol in the card's mana cost and rules text. In the mana cost, make sure to include spaces in between the codes, and in the rules text include '<' before each code and '>' after.<br/>
+		<div class="column" style="width: 100px">
+			w - <img id="w"><br/>
+			u - <img id="u"><br/>
+			b - <img id="b"><br/>
+			r - <img id="r"><br/>
+			g - <img id="g"><br/>
+		</div>
+		<div class="column" style="width: 100px">
+			pw - <img id="pw"><br/>
+			pu - <img id="pu"><br/>
+			pb - <img id="pb"><br/>
+			pr - <img id="pr"><br/>
+			pg - <img id="pg"><br/>
+		</div>
+		<div class="column" style="width: 100px">
+			2w - <img id="2w"><br/>
+			2u - <img id="2u"><br/>
+			2b - <img id="2b"><br/>
+			2r - <img id="2r"><br/>
+			2g - <img id="2g"><br/>
+		</div>
+		<div class="column" style="width: 100px">
+			w - <img id="wu"><br/>
+			u - <img id="wb"><br/>
+			b - <img id="ub"><br/>
+			r - <img id="ur"><br/>
+			g - <img id="br"><br/>
+		</div>
+		<div class="column" style="width: 100px">
+			w - <img id="bg"><br/>
+			u - <img id="rg"><br/>
+			b - <img id="rw"><br/>
+			r - <img id="gw"><br/>
+			g - <img id="gu"><br/>
+		</div>
+		<div class="column" style="width: 100px">
+			0 - <img id="0"><br/>
+			1 - <img id="1"><br/>
+			2 - <img id="2"><br/>
+			3 - <img id="3"><br/>
+			4 - <img id="4"><br/>
+		</div>
+		<div class="column" style="width: 100px">
+			5 - <img id="5"><br/>
+			6 - <img id="6"><br/>
+			7 - <img id="7"><br/>
+			8 - <img id="8"><br/>
+			9 - <img id="9"><br/>
+		</div>
+		<div class="column" style="width: 100px">
+			10 - <img id="10"><br/>
+			11 - <img id="11"><br/>
+			12 - <img id="12"><br/>
+			13 - <img id="13"><br/>
+			14 - <img id="14"><br/>
+		</div>
+		<div class="column" style="width: 100px">
+			15 - <img id="15"><br/>
+			16 - <img id="16"><br/>
+			17 - <img id="17"><br/>
+			18 - <img id="18"><br/>
+			19 - <img id="19"><br/>
+		</div>
+		<div class="column" style="width: 120px">
+			20 - <img id="20"><br/>
+			c - <img id="c"><br/>
+			x - <img id="x"><br/>
+			t - <img id="t"><br/>
+			untap - <img id="untap"><br/>
+		</div>
+		<div class="column" style="width: 120px">
+			snow - <img id="snow"><br/>
+			e - <img id="e"><br/>
+			<br/>
+			<br/>
+			<br/>
+		</div>
+		<br/><br/><br/><br/><br/><br/><br/> <!-- Not quite sure why I needed so many linebreaks here! -->
+		When selecting the card's color, use 'Second Color' for hybrid cards, and 'Third Color' for non-hybrid two-colored cards.
 	</div>
-	<div class="toggle" onclick="toggleVisibility('rulesText', this, 'toggleShown', 'hidden', 'shown')">Rules Text</div>
-	<div class="rulesText hidden">
-		Rules Text
-		<br/>
-		<textarea id="inputText" rows="5" cols="40"></textarea>
-		<br/>
-		Rules Text Font Size
-		<input id="textSize" type="number" min="0" max="100" value="37" step="0.5"></input>
-		<br/>
-		Pixels Between Paragraphs
-		<input id="textShift" type="number" min="0" max="300" value="0"></input>
-		<br/>
-		Shift All Text Down
-		<input id="textDown" type="number" min="0" max="300" value="0"></input>
-		<br/>
-	</div>
-	<div class="toggle" onclick="toggleVisibility('cardArt', this, 'toggleShown', 'hidden', 'shown')">Card Art</div>
-	<div class="cardArt hidden">
-		Image
-		<input type="file" accept="image/*" onchange="loadImage(event, imgArt, true)" id="inputPicture"></input>
-		<br/>
-		Image Zoom
-		<input id="imageSize" type="number" value="100" step="0.1"></input>
-		<br/>
-		Image Left
-		<input id="imageLeft" type="number" value="0" step="1"></input>
-		<br/>
-		Image Up
-		<input id="imageUp" type="number" value="0" step="1"></input>
-		<br/>
-	</div>
-	<div class="toggle" onclick="toggleVisibility('otherInfo', this, 'toggleShown', 'hidden', 'shown')">Other Information</div>
-	<div class="otherInfo hidden">
-		Other Info
-		<input id="inputInfo" value="Not A Real Card"></input>
-		<br/>
-		Card Number
-		<input id="inputNumber" value="001/001"></input>
-		<br/>
-		Rarity
-		<input id="inputRarity" value="C"></input>
-		<br/>
-		Set Abbreviation
-		<input id="inputSet" value="MTG"></input>
-		<br/>
-		Language
-		<input id="inputLanguage" value="EN"></input>
-		<br/>
-		Artist Credit
-		<input id="inputArtist" value=""></input>
-		<br/>
-		<input id="artistColor" type="checkbox">Make Artist Credit font black</input>
-		<br/>
-	</div>
-	<div class="toggle" onclick="toggleVisibility('setSymbolWatermark', this, 'toggleShown', 'hidden', 'shown')">Set Symbol and Watermark</div>
-	<div class="setSymbolWatermark hidden">
-		<input type="checkbox" id="setSymbolCheckbox" checked="true"></input>
-		Set Symbol
-		<input type="file" accept="image/*" onchange="loadImage(event, imgSetSymbol, true)" id="inputSetSymbol"></input>
-		<br/>
-		Scale Set Symbol
-		<input id="setSymbolSize" type="number" value="100" step="0.5"></input>
-		<br/><br/>
-		<input type="checkbox" id="watermarkCheckbox" checked="true"></input>
-		Watermark
-		<input type="file" accept="image/*" onchange="loadImage(event, imgWatermark, true)" id="inputWatermark"></input>
-		<br/>
-		Watermark Color
-		<select id="watermarkColorSelection">
-			<option value="#afa360">White</option>
-			<option value="#04527c">Blue</option>
-			<option value="#494949">Black</option>
-			<option value="#a3280d">Red</option>
-			<option value="#0f4f14">Green</option>
-			<option value="#7f5f00">Gold</option>
-			<option value="#616b72">Artifact/Colorless</option>
-		</select>
-		<br/>
-		<input type="checkbox" id="checkboxSecondWatermarkColor"> Second Watermark Color <select id="secondWatermarkColorSelection"></select></input>
-		<br/>
-	</div>
-</div>
-</div>
 	<div class="info">For Terms of Use and Disclaimer, see <a href="https://github.com/ImKyle4815/Kyles-Card-Imager" target="_blank">the Github page</a>.</div>
 </body>
 
@@ -192,7 +279,7 @@
 	color: rgb(255, 255, 255);
 	font-family: belerenbsc;
 	font-size: 20px;
-	width: 408px;
+	width: 100%;
 	padding: 5px;
 	border: 1px solid rgb(128, 255, 128);
 }
@@ -209,16 +296,27 @@
 	font-size: 100px;
 }
 .shown {
+	width: 100%;
 	padding: 5px;
 	border-width: 1px;
 	border-color: rgb(128, 255, 128);
 	border-style: dashed solid solid solid;
-}
+	font-size: 20px;
+	color: rgb(255,255,255);
+	font-family: belerenbsc;
 }
 .shown * {
-	color: rgb(255,255,255);
 	font-family: mplantin;
-	font-size: 15px;
+	font-size: 20px;
+}
+input[type="text"] {
+	width: 99%;
+}
+input[type="number"] {
+	width: 99%;
+}
+select {
+	width: 100%;
 }
 .column {
 	float: left;
@@ -228,11 +326,31 @@
 	display: table;
 	clear: both;
 }
+.text {
+	padding: 10px;
+	text-align: left;
+	color: rgb(128, 128, 128);
+	font-family: beleren;
+	font-size: 25px;
+}
+.text img {
+	position: relative;
+	top: 8px;
+	width: 30px;
+	padding: 0px 0px 0px 0px !important;
+	margin: 0px;
+}
 body {
 	color: rgb(255,255,255);
 	font-family: mplantin;
 	font-size: 18px;
-	background-color: rgb(56,56,56);
+}
+html {
+	background:url(data/background.png) no-repeat center center fixed;
+	-webkit-background-size: cover;
+	-moz-background-size: cover;
+ 	-o-background-size: cover;
+	background-size: cover;
 }
 canvas {
 	float: left;
@@ -266,13 +384,13 @@ var m15Info = true
 var canvas = document.getElementById("canvas")
 var card = canvas.getContext("2d")
 //Load dynamic images
-var dynamicImageList = ["borderColor", "secondBorderColor", "thirdBorderColor", "borderCreature", "secondBorderCreature", "thirdBorderCreature", "borderLegendary", "secondBorderLegendary", "thirdBorderLegendary", "borderRareStamp", "secondBorderRareStamp", "art", "artMask", "setSymbol", "watermark", "multiMask", "LegendMultiMask"]
+var dynamicImageList = ["borderColor", "secondBorderColor", "thirdBorderColor", "borderCreature", "secondBorderCreature", "thirdBorderCreature", "borderLegendary", "secondBorderLegendary", "thirdBorderLegendary", "borderRareStamp", "secondBorderRareStamp", "art", "artMask", "setSymbol", "watermark", "multiMask", "LegendMultiMask", "legendSilver"]
 for (i = 0; i < dynamicImageList.length; i ++) {
 	var imgName = "img" + dynamicImageList[i].charAt(0).toUpperCase() + dynamicImageList[i].slice(1)
 	window[imgName] = new Image()
 }
 //Load static images
-var staticImageList = ["artistBrush", "foil", "stampGradient", "multiGradient", "rareStamp", "cardMask"]
+var staticImageList = ["artistBrush", "foil", "stampGradient", "multiGradient", "rareStamp", "cardMask", "silverBorder", "borderEdge"]
 for (i = 0; i < staticImageList.length; i ++) {
 	var imgName = "img" + staticImageList[i].charAt(0).toUpperCase() + staticImageList[i].slice(1)
 	window[imgName] = new Image()
@@ -284,6 +402,10 @@ var manaSymbolImages = new Array()
 for (var i = 0; i < manaSymbolCode.length; i++) {
 	manaSymbolImages[i] = new Image()
 	manaSymbolImages[i].src = "data/manaSymbols/" + i + ".png"
+	//alert(document.getElementById(manaSymbolImages[i]))
+	if (document.getElementById(manaSymbolCode[i]) != null) {
+		document.getElementById(manaSymbolCode[i]).src = "data/manaSymbols/" + i + ".png"
+	}
 }
 //fill second watermark dropdown menu
 document.getElementById("secondWatermarkColorSelection").innerHTML = document.getElementById("watermarkColorSelection").innerHTML
@@ -337,6 +459,7 @@ function updateBorder() {
 	imgArtMask.src = "data/borders/" + document.getElementById("borderSelection").value + "artMask.png"
 	imgMultiMask.src = "data/borders/" + document.getElementById("borderSelection").value + "multiMask.png"
 	imgLegendMultiMask.src = "data/borders/" + document.getElementById("borderSelection").value + "legendMultiMask.png"
+	imgLegendSilver.src = "data/borders/" + document.getElementById("borderSelection").value + "legendSilver.png"
 	updateColor()
 }
 //Loads the images for the card frame, power toughness box, and rare stamp
@@ -392,6 +515,17 @@ function drawBorder() {
 				}
 			}
 			card.drawImage(imgRareStamp, 340, rareStampY, 70, 37)
+		}
+	}
+	if(document.getElementById("legendaryCheckbox").checked == true) {
+		card.drawImage(imgBorderEdge, 0, 0, canvas.width, canvas.height)
+		if (document.getElementById("silverBorderCheckbox").checked == true) {
+			drawMask(imgLegendSilver, 0, 0, canvas.width, canvas.height, imgCardMask, imgLegendMultiMask, false)
+		}
+	} else {
+		card.drawImage(imgBorderEdge, 0, 0, canvas.width, canvas.height)
+		if (document.getElementById("silverBorderCheckbox").checked == true) {
+			card.drawImage(imgSilverBorder, 0, 0, canvas.width, canvas.height)
 		}
 	}
 }
