@@ -716,7 +716,7 @@ function rulesText(text, x, y) {
 					if (extraSpace == true) {
 						xShift += 2
 					}
-					card.drawImage(manaSymbolImages[manaSymbolCode.indexOf(words[n].substring(words[n].indexOf("<") + 1, words[n].indexOf(">")))], x + xShift + textSize * 0.054, y + textSize * 0.11, textSize * 0.77, textSize * 0.77)
+					card.drawImage(manaSymbolImages[manaSymbolCode.indexOf(words[n].substring(words[n].indexOf("<") + 1, words[n].indexOf(">")))], x + xShift + textSize * 0.054, y + textSize * 0.2, textSize * 0.77, textSize * 0.77)
 					xShift += textSize * 0.84
 					words[n] = words[n].slice(words[n].indexOf(">") + 1, words[n].length)
 					extraSpace = true
