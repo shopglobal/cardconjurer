@@ -10,8 +10,8 @@ To install CardForge, click the green button that says "clone or download," then
 <br><br>
 here are some samples:
 <br><br>
-<img src="Sample\ Cards/sample-card-1.png" alt="Sample image" width="400">
-<img src="Sample\ Cards/sample-card-2.png" alt="Sample image" width="400">
+<img src="Sample%20Cards/sample-card-1.png" alt="Sample image" width="400">
+<img src="Sample%20Cards/sample-card-2.png" alt="Sample image" width="400">
 <img src="Sample%20Cards/sample-card-6.png" alt="Sample image" width="400">
-<img src="Sample Cards/sample-card-3.png" alt="Sample image" width="400">
-<img src="Sample cards/sample-card-5.png" alt="Sample image" width="400">
+<img src="Sample%20Cards/sample-card-3.png" alt="Sample image" width="400">
+<img src="Sample%20Cards/sample-card-5.png" alt="Sample image" width="400">
