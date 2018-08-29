@@ -6,6 +6,7 @@
 	<script src="data/scripts/loadImage.js"></script>
 	<script src="data/scripts/loadColors.js"></script>
 	<script src="data/scripts/mask.js"></script>
+    <script src="data/scripts/autocrop.js"></script>
 	<div class="title">CardForge</div>
 </head>
 <!-- <img src="data/background.png"></img> -->
@@ -113,8 +114,15 @@
 				</div>
 				<div class="toggle" onclick="toggleVisibility('setSymbolWatermark', this, 'toggleShown', 'hidden', 'shown')">Set Symbol and Watermark</div>
 				<div class="setSymbolWatermark hidden">
-					<input type="checkbox" id="setSymbolCheckbox" checked="true"></input>
-					Set Symbol
+					<input type="checkbox" id="setSymbolCheckbox" checked="true">Set Symbol</input>
+                    <br>
+                    Set Code
+                    <input type="text" onchange="loadSetSymbol()" value="HM" id="setSymbolCode"></input>
+                    <br>
+                    Set Symbol Rarity
+                    <input type="text" onchange="loadSetSymbol()" value="C" id="setSymbolRarity"></input>
+                    <br>
+					Custom Set Symbol
 					<input type="file" accept="image/*" onchange="loadImage(event, imgSetSymbol, true)" id="inputSetSymbol"></input>
 					<br/>
 					Scale Set Symbol
@@ -407,6 +415,8 @@ for (var i = 0; i < manaSymbolCode.length; i++) {
 		document.getElementById(manaSymbolCode[i]).src = "data/manaSymbols/" + i + ".png"
 	}
 }
+//load first set symbol
+loadSetSymbol()
 //fill second watermark dropdown menu
 document.getElementById("secondWatermarkColorSelection").innerHTML = document.getElementById("watermarkColorSelection").innerHTML
 
@@ -716,7 +726,7 @@ function rulesText(text, x, y) {
 					if (extraSpace == true) {
 						xShift += 2
 					}
-					card.drawImage(manaSymbolImages[manaSymbolCode.indexOf(words[n].substring(words[n].indexOf("<") + 1, words[n].indexOf(">")))], x + xShift + textSize * 0.054, y + textSize * 0.2, textSize * 0.77, textSize * 0.77)
+					card.drawImage(manaSymbolImages[manaSymbolCode.indexOf(words[n].substring(words[n].indexOf("<") + 1, words[n].indexOf(">")))], x + xShift + textSize * 0.054, y + textSize * 0.11, textSize * 0.77, textSize * 0.77)
 					xShift += textSize * 0.84
 					words[n] = words[n].slice(words[n].indexOf(">") + 1, words[n].length)
 					extraSpace = true
@@ -762,6 +772,12 @@ function toggleVisibility(targetClass, self, selfClass, hiddenClass, shownClass)
 		elementList[i].classList.toggle(hiddenClass)
 		elementList[i].classList.toggle(shownClass)
 	}
+}
+
+//runs the autocrop function for the chosen set symbol
+function loadSetSymbol() {
+    var setSymbolURL = "http://gatherer.wizards.com/Handlers/Image.ashx?type=symbol&set=" + document.getElementById("setSymbolCode").value + "&size=large&rarity=" + document.getElementById("setSymbolRarity").value
+    autocrop(setSymbolURL, imgSetSymbol)
 }
 </script>
 <html>
