@@ -6,7 +6,7 @@
 	<script src="data/scripts/loadImage.js"></script>
 	<script src="data/scripts/loadColors.js"></script>
 	<script src="data/scripts/mask.js"></script>
-    <script src="data/scripts/autocrop.js"></script>
+    <!--<script src="data/scripts/autocrop.js"></script> This is no longer required, but possibly could be in the future -->
 	<div class="title">CardForge</div>
 </head>
 <!-- <img src="data/background.png"></img> -->
@@ -776,8 +776,7 @@ function toggleVisibility(targetClass, self, selfClass, hiddenClass, shownClass)
 
 //runs the autocrop function for the chosen set symbol
 function loadSetSymbol() {
-    var setSymbolURL = "http://gatherer.wizards.com/Handlers/Image.ashx?type=symbol&set=" + document.getElementById("setSymbolCode").value + "&size=large&rarity=" + document.getElementById("setSymbolRarity").value
-    autocrop(setSymbolURL, imgSetSymbol)
+    imgSetSymbol.src = "https://raw.githubusercontent.com/ImKyle4815/MTG-Set-Symbols/master/setSymbols/" + document.getElementById("setSymbolCode").value.toUpperCase() + "_" + document.getElementById("setSymbolRarity").value.toUpperCase() + ".png"
 }
 </script>
 <html>
