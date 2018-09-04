@@ -1,13 +1,13 @@
 <!DOCTYPE HTML>
 <html>
 <head>
-	<title>CardForge - Custom Magic Card Maker</title>
+	<title>Card Conjurer - Custom Magic Card Maker</title>
 	<script src="data/scripts/loadScript.js"></script>
 	<script src="data/scripts/loadImage.js"></script>
 	<script src="data/scripts/loadColors.js"></script>
 	<script src="data/scripts/mask.js"></script>
     <!--<script src="data/scripts/autocrop.js"></script> This is no longer required, but possibly could be in the future -->
-	<div class="title">CardForge</div>
+	<div class="title">Card Conjurer</div>
 </head>
 <!-- <img src="data/background.png"></img> -->
 <body>
@@ -231,7 +231,7 @@
 		<br/><br/><br/><br/><br/><br/><br/> <!-- Not quite sure why I needed so many linebreaks here! -->
 		When selecting the card's color, use 'Second Color' for hybrid cards, and 'Third Color' for non-hybrid two-colored cards.
 	</div>
-	<div class="info">For Terms of Use and Disclaimer, see <a href="https://github.com/ImKyle4815/CardForge" target="_blank">the Github page</a>.</div>
+	<div class="info">For Terms of Use and Disclaimer, see <a href="https://github.com/ImKyle4815/CardConjurer" target="_blank">the Github page</a>.</div>
 </body>
 
 
@@ -653,14 +653,14 @@ function bottomInfoM15() {
 	if (445 < artistBrushShift + 21 + card.measureText(document.getElementById("inputArtist").value).width && document.getElementById("creatureCheckbox").checked == true) {
 		shiftInfo = artistBrushShift + card.measureText(document.getElementById("inputArtist").value).width + 26
 	}
-	//This is where "CF —" is hardcoded. The only reason is to prevent users from easily typing in the trademark and copyright that's usually on real cards. It's also there so I can see if a card was created with my program, it makes me feel good :)
+	//This is where "CC —" is hardcoded. The only reason is to prevent users from easily typing in the trademark and copyright that's usually on real cards. It's also there so I can see if a card was created with my program, it makes me feel good :)
 	if (document.getElementById("inputInfo").value != "") {
 		canvas.style.letterSpacing = "0px"
 		card.font = "17px mplantin"
 		if (document.getElementById("creatureCheckbox").checked == true) {
-			card.fillText("CF \u2014 " + document.getElementById("inputInfo").value, shiftInfo, m15InfoY + 3)
+			card.fillText("CC \u2014 " + document.getElementById("inputInfo").value, shiftInfo, m15InfoY + 3)
 		} else {
-			card.fillText("CF \u2014 " + document.getElementById("inputInfo").value, shiftInfo, m15InfoY - 17)
+			card.fillText("CC \u2014 " + document.getElementById("inputInfo").value, shiftInfo, m15InfoY - 17)
 		}
 	}
 }
@@ -676,7 +676,7 @@ function bottomInfo8th() {
 	card.fillText(document.getElementById("inputArtist").value, 116, eighthInfoY)
 	canvas.style.letterSpacing = "0.5px"
 	card.font = "16px mplantin"
-	card.fillText("CF \u2014 " + document.getElementById("inputInfo").value + " " + document.getElementById("inputNumber").value, 62, eighthInfoY + 31)
+	card.fillText("CC \u2014 " + document.getElementById("inputInfo").value + " " + document.getElementById("inputNumber").value, 62, eighthInfoY + 31)
 }
 
 //Write rules and flavor text
