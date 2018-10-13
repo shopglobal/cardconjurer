@@ -1,5 +1,6 @@
 # Card Conjurer
-To install Card Conjurer, click the green button that says "clone or download," then click "download zip." After that all you need to do is unzip the folder and open it. Run the html file by double clicking it.
+Use the following link to start creating your own custom Magic: The Gathering cards!
+https://imkyle4815.github.io/cardconjurer/
 
 
 [![Donate](https://img.shields.io/badge/Donate-PayPal-blue.svg?longCache=true&style=popout)](https://www.paypal.me/kyleburtondonate
