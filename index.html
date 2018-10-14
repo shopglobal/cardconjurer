@@ -43,6 +43,8 @@
 					<br/>
 					<input type="checkbox" id="silverBorderCheckbox">Silver Border</input>
 					<br/>
+					<input type="color" id="inputColor"> Border Color</input>
+					<br/>
 					<input type="checkbox" id="foilCheckbox">Foil</input>
 					<br/>
 				</div>
@@ -392,7 +394,7 @@ var m15Info = true
 var canvas = document.getElementById("canvas")
 var card = canvas.getContext("2d")
 //Load dynamic images
-var dynamicImageList = ["borderColor", "secondBorderColor", "thirdBorderColor", "borderCreature", "secondBorderCreature", "thirdBorderCreature", "borderLegendary", "secondBorderLegendary", "thirdBorderLegendary", "borderRareStamp", "secondBorderRareStamp", "art", "artMask", "setSymbol", "watermark", "multiMask", "LegendMultiMask", "legendSilver"]
+var dynamicImageList = ["borderColor", "secondBorderColor", "thirdBorderColor", "borderCreature", "secondBorderCreature", "thirdBorderCreature", "borderLegendary", "secondBorderLegendary", "thirdBorderLegendary", "borderRareStamp", "secondBorderRareStamp", "art", "artMask", "setSymbol", "watermark", "multiMask", "LegendMultiMask", "legendSilver", "borderColorMask"]
 for (i = 0; i < dynamicImageList.length; i ++) {
 	var imgName = "img" + dynamicImageList[i].charAt(0).toUpperCase() + dynamicImageList[i].slice(1)
 	window[imgName] = new Image()
@@ -470,6 +472,7 @@ function updateBorder() {
 	imgMultiMask.src = "data/borders/" + document.getElementById("borderSelection").value + "multiMask.png"
 	imgLegendMultiMask.src = "data/borders/" + document.getElementById("borderSelection").value + "legendMultiMask.png"
 	imgLegendSilver.src = "data/borders/" + document.getElementById("borderSelection").value + "legendSilver.png"
+	imgBorderColorMask.src = "data/borders/" + document.getElementById("borderSelection").value + "borderColorMask.png"
 	updateColor()
 }
 //Loads the images for the card frame, power toughness box, and rare stamp
@@ -527,13 +530,15 @@ function drawBorder() {
 			card.drawImage(imgRareStamp, 340, rareStampY, 70, 37)
 		}
 	}
+	//Draws the selected colored border
+	drawMask(document.getElementById("inputColor").value, 0, 0, canvas.width, canvas.height, imgBorderColorMask, false, false)
 	if(document.getElementById("legendaryCheckbox").checked == true) {
-		card.drawImage(imgBorderEdge, 0, 0, canvas.width, canvas.height)
+		//////////////////////////////////////////////////////////////////////////////////////card.drawImage(imgBorderEdge, 0, 0, canvas.width, canvas.height)
 		if (document.getElementById("silverBorderCheckbox").checked == true) {
 			drawMask(imgLegendSilver, 0, 0, canvas.width, canvas.height, imgCardMask, false, false)
 		}
 	} else {
-		card.drawImage(imgBorderEdge, 0, 0, canvas.width, canvas.height)
+		/////////////////////////////////////////////////////////////////////////////////////card.drawImage(imgBorderEdge, 0, 0, canvas.width, canvas.height)
 		if (document.getElementById("silverBorderCheckbox").checked == true) {
 			card.drawImage(imgSilverBorder, 0, 0, canvas.width, canvas.height)
 		}
@@ -632,8 +637,12 @@ function writeText() {
 }
 //Bottom info on M15 cards
 function bottomInfoM15() {
+	if (document.getElementById("artistColor").checked == true) {
+		card.fillStyle = "black"
+	} else {
+		card.fillStyle = "white"
+	}
 	var shiftInfo = 445
-	card.fillStyle = "white"
 	canvas.style.letterSpacing = "0.8px"
 	card.font = "19.5px relaymedium"
 	var bottomLine = document.getElementById("inputSet").value + " \u00b7 " + document.getElementById("inputLanguage").value
