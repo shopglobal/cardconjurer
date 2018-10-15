@@ -6,7 +6,7 @@
 	<script src="data/scripts/loadImage.js"></script>
 	<script src="data/scripts/loadColors.js"></script>
 	<script src="data/scripts/mask.js"></script>
-    <!--<script src="data/scripts/autocrop.js"></script> This is no longer required, but possibly could be in the future -->
+	<!--<script src="data/scripts/autocrop.js"></script> This is no longer required, but possibly could be in the future -->
 	<div class="title">Card Conjurer</div>
 </head>
 <!-- <img src="data/background.png"></img> -->
@@ -117,13 +117,13 @@
 				<div class="toggle" onclick="toggleVisibility('setSymbolWatermark', this, 'toggleShown', 'hidden', 'shown')">Set Symbol and Watermark</div>
 				<div class="setSymbolWatermark hidden">
 					<input type="checkbox" id="setSymbolCheckbox" checked="true">Set Symbol</input>
-                    <br>
-                    Set Code
-                    <input type="text" onchange="loadSetSymbol()" value="HM" id="setSymbolCode"></input>
-                    <br>
-                    Set Symbol Rarity
-                    <input type="text" onchange="loadSetSymbol()" value="C" id="setSymbolRarity"></input>
-                    <br>
+					<br>
+					Set Code
+					<input type="text" onchange="loadSetSymbol()" value="HM" id="setSymbolCode"></input>
+					<br>
+					Set Symbol Rarity
+					<input type="text" onchange="loadSetSymbol()" value="C" id="setSymbolRarity"></input>
+					<br>
 					Custom Set Symbol
 					<input type="file" accept="image/*" onchange="loadImage(event, imgSetSymbol, true)" id="inputSetSymbol"></input>
 					<br/>
@@ -359,7 +359,7 @@ html {
 	background:url(data/background.png) no-repeat center center fixed;
 	-webkit-background-size: cover;
 	-moz-background-size: cover;
- 	-o-background-size: cover;
+	-o-background-size: cover;
 	background-size: cover;
 }
 canvas {
@@ -394,13 +394,13 @@ var m15Info = true
 var canvas = document.getElementById("canvas")
 var card = canvas.getContext("2d")
 //Load dynamic images
-var dynamicImageList = ["borderColor", "secondBorderColor", "thirdBorderColor", "borderCreature", "secondBorderCreature", "thirdBorderCreature", "borderLegendary", "secondBorderLegendary", "thirdBorderLegendary", "borderRareStamp", "secondBorderRareStamp", "art", "artMask", "setSymbol", "watermark", "multiMask", "LegendMultiMask", "legendSilver", "borderColorMask"]
+var dynamicImageList = ["borderColor", "secondBorderColor", "thirdBorderColor", "borderCreature", "secondBorderCreature", "thirdBorderCreature", "borderLegendary", "secondBorderLegendary", "thirdBorderLegendary", "borderRareStamp", "secondBorderRareStamp", "art", "setSymbol", "watermark", "multiMask", "LegendMultiMask", "rareStampMask", "frameMask", "legendFrameMask", "borderMask"]
 for (i = 0; i < dynamicImageList.length; i ++) {
 	var imgName = "img" + dynamicImageList[i].charAt(0).toUpperCase() + dynamicImageList[i].slice(1)
 	window[imgName] = new Image()
 }
 //Load static images
-var staticImageList = ["artistBrush", "foil", "stampGradient", "multiGradient", "rareStamp", "cardMask", "silverBorder", "borderEdge"]
+var staticImageList = ["artistBrush", "foil", "stampGradient", "multiGradient", "rareStamp", "cardMask"]
 for (i = 0; i < staticImageList.length; i ++) {
 	var imgName = "img" + staticImageList[i].charAt(0).toUpperCase() + staticImageList[i].slice(1)
 	window[imgName] = new Image()
@@ -428,7 +428,7 @@ updateBorder()
 setInterval(function() {
 		//Insures that the corners of the final image are transparent
 		card.globalCompositeOperation = "source-over"
-		card.drawImage(imgCardMask, 0, 0, 749, 1044)
+		drawMask(document.getElementById("inputColor").value, 0, 0, canvas.width, canvas.height, imgCardMask, false, false)
 		card.globalCompositeOperation = "source-atop"
 		//These functions draw everything
 		drawPicture()
@@ -468,11 +468,12 @@ function updateBorder() {
 	//the loadScript function is located in data/scripts/loadScript.js. It sets values to variables such as set symbol coordinates or title font
 	loadScript("data/borders/" + document.getElementById("borderSelection").value + "border.js")
 	document.getElementById("colorSelection").value = "white"
-	imgArtMask.src = "data/borders/" + document.getElementById("borderSelection").value + "artMask.png"
 	imgMultiMask.src = "data/borders/" + document.getElementById("borderSelection").value + "multiMask.png"
 	imgLegendMultiMask.src = "data/borders/" + document.getElementById("borderSelection").value + "legendMultiMask.png"
-	imgLegendSilver.src = "data/borders/" + document.getElementById("borderSelection").value + "legendSilver.png"
-	imgBorderColorMask.src = "data/borders/" + document.getElementById("borderSelection").value + "borderColorMask.png"
+	imgRareStampMask.src = "data/borders/" + document.getElementById("borderSelection").value + "rareStampMask.png"
+	imgFrameMask.src = "data/borders/" + document.getElementById("borderSelection").value + "frameMask.png"
+	imgLegendFrameMask.src = "data/borders/" + document.getElementById("borderSelection").value + "legendFrameMask.png"
+	imgBorderMask.src = "data/borders/" + document.getElementById("borderSelection").value + "borderMask.png"
 	updateColor()
 }
 //Loads the images for the card frame, power toughness box, and rare stamp
@@ -503,6 +504,38 @@ function drawPicture() {
 //Draw Border
 function drawBorder() {
 	//These if else statements check to see whether or not to draw different parts of the card, like the legendary border or rare stamp, and draws them in the appropriate order such that when multiple border colors are used the gradients overlap correctly
+	if (document.getElementById("legendaryCheckbox").checked == true && m15Info == true) {
+		drawMask(imgBorderLegendary, 0, 0, canvas.width, canvas.height, imgLegendFrameMask, false, false)
+		if (document.getElementById("checkboxSecondColor").checked == true) {
+			drawMask(imgSecondBorderLegendary, 0, 0, canvas.width, canvas.height, imgLegendFrameMask, imgMultiGradient, "reverseSecond")
+		}
+		if (document.getElementById("checkboxThirdColor").checked == true) {
+			drawMask(imgThirdBorderColor, 0, 0, canvas.width, canvas.height, imgLegendFrameMask, imgLegendMultiMask)
+		}
+		if (document.getElementById("silverBorderCheckbox").checked == true) {
+			drawMask("#a3aeb7", 0, 0, canvas.width, canvas.height, imgBorderMask, imgLegendFrameMask, "reverseSecond")
+		}
+	} else {
+		drawMask(imgBorderColor, 0, 0, canvas.width, canvas.height, imgFrameMask, false, false)
+		if (document.getElementById("checkboxSecondColor").checked == true) {
+			drawMask(imgSecondBorderColor, 0, 0, canvas.width, canvas.height, imgFrameMask, imgMultiGradient, "reverseSecond")
+		}
+		if (document.getElementById("checkboxThirdColor").checked == true) {
+			drawMask(imgThirdBorderColor, 0, 0, canvas.width, canvas.height, imgFrameMask, imgMultiMask, false)
+		}
+		if (document.getElementById("silverBorderCheckbox").checked == true) {
+			drawMask("#a3aeb7", 0, 0, canvas.width, canvas.height, imgBorderMask, imgFrameMask, "reverseSecond")
+		}
+	}
+	if (document.getElementById("rareStampCheckbox").checked == true && m15Info == true) {
+		card.drawImage(imgBorderRareStamp, 329, rareStampY - 15, 90, 50)
+		if (document.getElementById("checkboxSecondColor").checked == true) {
+			drawMask(imgSecondBorderRareStamp, 329, rareStampY - 15, 90, 50, imgSecondBorderRareStamp, imgStampGradient, "reverseSecond")
+		}
+		drawMask(document.getElementById("inputColor").value, 329, rareStampY - 15, 90, 50, imgRareStampMask, false, false)
+		card.drawImage(imgRareStamp, 340, rareStampY, 70, 37)
+	}
+	/*
 	drawMask(imgBorderColor, 0, 0, canvas.width, canvas.height, imgArtMask, false, false)
 	if (document.getElementById("checkboxSecondColor").checked == true) {
 		drawMask(imgSecondBorderColor, 0, 0, canvas.width, canvas.height, imgArtMask, imgMultiGradient, "reverseSecond")
@@ -520,6 +553,8 @@ function drawBorder() {
 				drawMask(imgThirdBorderColor, 0, 0, canvas.width, canvas.height, imgLegendMultiMask, imgArtMask, false)
 			}
 		}
+		//Draws the selected colored border
+		drawMask(document.getElementById("inputColor").value, 0, 0, canvas.width, canvas.height, imgBorderColorMask, false, false)
 		if (document.getElementById("rareStampCheckbox").checked == true) {
 			if (imgBorderRareStamp.width != 0) {
 				card.drawImage(imgBorderRareStamp, 329, rareStampY - 15, 90, 50)
@@ -527,22 +562,21 @@ function drawBorder() {
 					drawMask(imgSecondBorderRareStamp, 329, rareStampY - 15, 90, 50, imgSecondBorderRareStamp, imgStampGradient, "reverseSecond")
 				}
 			}
+			//draws solid color, then holo stamp
+			drawMask(document.getElementById("inputColor").value, 329, rareStampY - 15, 90, 50, imgRareStampMask, false, false)
 			card.drawImage(imgRareStamp, 340, rareStampY, 70, 37)
 		}
 	}
-	//Draws the selected colored border
-	drawMask(document.getElementById("inputColor").value, 0, 0, canvas.width, canvas.height, imgBorderColorMask, false, false)
 	if(document.getElementById("legendaryCheckbox").checked == true) {
-		//////////////////////////////////////////////////////////////////////////////////////card.drawImage(imgBorderEdge, 0, 0, canvas.width, canvas.height)
 		if (document.getElementById("silverBorderCheckbox").checked == true) {
 			drawMask(imgLegendSilver, 0, 0, canvas.width, canvas.height, imgCardMask, false, false)
 		}
 	} else {
-		/////////////////////////////////////////////////////////////////////////////////////card.drawImage(imgBorderEdge, 0, 0, canvas.width, canvas.height)
 		if (document.getElementById("silverBorderCheckbox").checked == true) {
 			card.drawImage(imgSilverBorder, 0, 0, canvas.width, canvas.height)
 		}
 	}
+	*/
 }
 //Draw Set Symbol
 function drawSetSymbol() {
@@ -648,7 +682,7 @@ function bottomInfoM15() {
 	var bottomLine = document.getElementById("inputSet").value + " \u00b7 " + document.getElementById("inputLanguage").value
 	card.fillText(bottomLine, 48, m15InfoY)
 	var artistBrushShift = card.measureText(bottomLine).width + 58
-	card.drawImage(imgArtistBrush, artistBrushShift, m15InfoY + 5, 21, 13)
+	drawMask(card.fillStyle, artistBrushShift, m15InfoY + 5, 21, 13, imgArtistBrush, false, false)
 	canvas.style.letterSpacing = "1.3px"
 	card.font = "19.5px relaymedium"
 	card.fillText(document.getElementById("inputNumber").value, 49, m15InfoY - 20)
@@ -785,7 +819,7 @@ function toggleVisibility(targetClass, self, selfClass, hiddenClass, shownClass)
 
 //runs the autocrop function for the chosen set symbol
 function loadSetSymbol() {
-    imgSetSymbol.src = "https://raw.githubusercontent.com/ImKyle4815/MTG-Set-Symbols/master/setSymbols/" + document.getElementById("setSymbolCode").value.toUpperCase() + "_" + document.getElementById("setSymbolRarity").value.toUpperCase() + ".png"
+	imgSetSymbol.src = "https://raw.githubusercontent.com/ImKyle4815/MTG-Set-Symbols/master/setSymbols/" + document.getElementById("setSymbolCode").value.toUpperCase() + "_" + document.getElementById("setSymbolRarity").value.toUpperCase() + ".png"
 }
 </script>
 <html>
