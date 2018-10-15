@@ -400,7 +400,7 @@ for (i = 0; i < dynamicImageList.length; i ++) {
 	window[imgName] = new Image()
 }
 //Load static images
-var staticImageList = ["artistBrush", "foil", "stampGradient", "multiGradient", "rareStamp", "cardMask"]
+var staticImageList = ["artistBrush", "foil", "stampGradient", "multiGradient", "rareStamp", "cardMask", "artMask"]
 for (i = 0; i < staticImageList.length; i ++) {
 	var imgName = "img" + staticImageList[i].charAt(0).toUpperCase() + staticImageList[i].slice(1)
 	window[imgName] = new Image()
@@ -432,6 +432,7 @@ setInterval(function() {
 		card.globalCompositeOperation = "source-atop"
 		//These functions draw everything
 		drawPicture()
+		drawMask(document.getElementById("inputColor").value, 0, 0, canvas.width, canvas.height, imgCardMask, imgArtMask, false)
 		drawBorder()
 		drawSetSymbol()
 		drawManaCost()
@@ -499,7 +500,10 @@ function drawPicture() {
 	var imageScale = document.getElementById("imageSize").value * 0.01
 	var imageLeftShift = parseInt(document.getElementById("imageLeft").value)
 	var imageUpShift = parseInt(document.getElementById("imageUp").value)
-	card.drawImage(imgArt, 58 - imageLeftShift, 119 - imageUpShift, imgArt.width * imageScale, imgArt.height * imageScale)
+	if (imgArt.width > 0) {
+		//drawMask(imgArt, 58 - imageLeftShift, 118 - imageUpShift, imgArt.width * imageScale, imgArt.height * imageScale, imgArtMask, false, false)
+	}
+	card.drawImage(imgArt, 58 - imageLeftShift, 118 - imageUpShift, imgArt.width * imageScale, imgArt.height * imageScale)
 }
 //Draw Border
 function drawBorder() {
