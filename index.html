@@ -20,7 +20,7 @@
 				<div class="toggle" onclick="toggleVisibility('cardBorder', this, 'toggleShown', 'hidden', 'shown')">Card Border</div>
 				<div class="cardBorder hidden">
 					Border
-					<select id="borderSelection" onchange="updateBorder()">
+					<select id="borderSelection" onchange="changeBorder()">
 						<option value="m15/">M15</option>
 						<option value="8th/">8th</option>
 					</select>
@@ -412,7 +412,6 @@ var manaSymbolImages = new Array()
 for (var i = 0; i < manaSymbolCode.length; i++) {
 	manaSymbolImages[i] = new Image()
 	manaSymbolImages[i].src = "data/manaSymbols/" + i + ".png"
-	//alert(document.getElementById(manaSymbolImages[i]))
 	if (document.getElementById(manaSymbolCode[i]) != null) {
 		document.getElementById(manaSymbolCode[i]).src = "data/manaSymbols/" + i + ".png"
 	}
@@ -424,7 +423,7 @@ document.getElementById("secondWatermarkColorSelection").innerHTML = document.ge
 
 
 //Runs ten times every second (main loop)
-updateBorder()
+changeBorder()
 setInterval(function() {
 		//Insures that the corners of the final image are transparent
 		card.globalCompositeOperation = "source-over"
@@ -463,18 +462,25 @@ setInterval(function() {
 	}, 100)
 
 
-
-//Loads different types of borders
-function updateBorder() {
+//The two following functions load different types of borders
+function changeBorder() {
 	//the loadScript function is located in data/scripts/loadScript.js. It sets values to variables such as set symbol coordinates or title font
-	loadScript("data/borders/" + document.getElementById("borderSelection").value + "border.js")
+	borderPath = "data/borders/" + document.getElementById("borderSelection").value
+	loadScript(borderPath + "border.js")
+}
+function updateBorder() {
+	//This is a seperate function to insure that the border.js file finishes running before running a few last commands
 	document.getElementById("colorSelection").value = "white"
-	imgMultiMask.src = "data/borders/" + document.getElementById("borderSelection").value + "multiMask.png"
-	imgLegendMultiMask.src = "data/borders/" + document.getElementById("borderSelection").value + "legendMultiMask.png"
-	imgRareStampMask.src = "data/borders/" + document.getElementById("borderSelection").value + "rareStampMask.png"
-	imgFrameMask.src = "data/borders/" + document.getElementById("borderSelection").value + "frameMask.png"
-	imgLegendFrameMask.src = "data/borders/" + document.getElementById("borderSelection").value + "legendFrameMask.png"
-	imgBorderMask.src = "data/borders/" + document.getElementById("borderSelection").value + "borderMask.png"
+	imgMultiMask.src = borderPath + "multiMask.png"
+	imgFrameMask.src = borderPath + "frameMask.png"
+	if (m15Info == true) {
+		imgLegendFrameMask.src = borderPath + "legendFrameMask.png"
+		imgLegendMultiMask.src = borderPath + "legendMultiMask.png"
+		imgRareStampMask.src = borderPath + "rareStampMask.png"
+		imgBorderMask.src = borderPath + "borderMask.png"
+	} else if (eighthInfo == true) {
+		imgBorderMask.src = borderPath + "frameMask.png"
+	}
 	updateColor()
 }
 //Loads the images for the card frame, power toughness box, and rare stamp
@@ -539,48 +545,6 @@ function drawBorder() {
 		drawMask(document.getElementById("inputColor").value, 329, rareStampY - 15, 90, 50, imgRareStampMask, false, false)
 		card.drawImage(imgRareStamp, 340, rareStampY, 70, 37)
 	}
-	/*
-	drawMask(imgBorderColor, 0, 0, canvas.width, canvas.height, imgArtMask, false, false)
-	if (document.getElementById("checkboxSecondColor").checked == true) {
-		drawMask(imgSecondBorderColor, 0, 0, canvas.width, canvas.height, imgArtMask, imgMultiGradient, "reverseSecond")
-	}
-	if (document.getElementById("checkboxThirdColor").checked == true) {
-		drawMask(imgThirdBorderColor, 0, 0, canvas.width, canvas.height, imgMultiMask, imgArtMask, false)
-	}
-	if (m15Info == true) {
-		if (document.getElementById("legendaryCheckbox").checked == true && imgBorderLegendary.width != 0) {
-			card.drawImage(imgBorderLegendary, 0, 0, canvas.width, canvas.height)
-			if (document.getElementById("checkboxSecondColor").checked == true && imgBorderLegendary.width != 0) {
-				drawMask(imgSecondBorderLegendary, 0, 0, canvas.width, canvas.height, imgArtMask, imgMultiGradient, "reverseSecond")
-			}
-			if (document.getElementById("checkboxThirdColor").checked == true) {
-				drawMask(imgThirdBorderColor, 0, 0, canvas.width, canvas.height, imgLegendMultiMask, imgArtMask, false)
-			}
-		}
-		//Draws the selected colored border
-		drawMask(document.getElementById("inputColor").value, 0, 0, canvas.width, canvas.height, imgBorderColorMask, false, false)
-		if (document.getElementById("rareStampCheckbox").checked == true) {
-			if (imgBorderRareStamp.width != 0) {
-				card.drawImage(imgBorderRareStamp, 329, rareStampY - 15, 90, 50)
-				if (document.getElementById("checkboxSecondColor").checked == true) {
-					drawMask(imgSecondBorderRareStamp, 329, rareStampY - 15, 90, 50, imgSecondBorderRareStamp, imgStampGradient, "reverseSecond")
-				}
-			}
-			//draws solid color, then holo stamp
-			drawMask(document.getElementById("inputColor").value, 329, rareStampY - 15, 90, 50, imgRareStampMask, false, false)
-			card.drawImage(imgRareStamp, 340, rareStampY, 70, 37)
-		}
-	}
-	if(document.getElementById("legendaryCheckbox").checked == true) {
-		if (document.getElementById("silverBorderCheckbox").checked == true) {
-			drawMask(imgLegendSilver, 0, 0, canvas.width, canvas.height, imgCardMask, false, false)
-		}
-	} else {
-		if (document.getElementById("silverBorderCheckbox").checked == true) {
-			card.drawImage(imgSilverBorder, 0, 0, canvas.width, canvas.height)
-		}
-	}
-	*/
 }
 //Draw Set Symbol
 function drawSetSymbol() {
@@ -657,7 +621,7 @@ function writeText() {
 	canvas.style.letterSpacing = textFontSpacing + "px"
 	card.font = document.getElementById("textSize").value + textFont
 	var text = document.getElementById("inputText").value
-	rulesText(text, textX, textY)
+	drawText(text, textX, textY)
 	//Power/Toughness
 	if (document.getElementById("creatureCheckbox").checked == true) {
 		if (document.getElementById("checkboxThirdColor").checked == true) {
@@ -725,87 +689,113 @@ function bottomInfo8th() {
 	card.font = "16px mplantin"
 	card.fillText("CC \u2014 " + document.getElementById("inputInfo").value + " " + document.getElementById("inputNumber").value, 62, eighthInfoY + 31)
 }
-
-//Write rules and flavor text
-function rulesText(text, x, y) {
-	//This uses a long series of if/else statements to process the entered text (after its split into an array). It writes the rules text line by line taking into accounts symbols, line breaks, and italicized text
-	var paragraphShift = parseInt(document.getElementById("textShift").value, 10)
-	var paragraphDown = parseInt(document.getElementById("textDown").value, 10)
-	var words = (text + " ").split(" ")
-	var testLine = ""
+//Write the rules and flavor text!
+function drawText(text, xCoord, yCoord) {
+	var x = xCoord
+	var lineSpace = parseInt(document.getElementById("textShift").value, 10)
+	var textSize = parseInt(document.getElementById("textSize").value, 10)
+	var y = yCoord + parseInt(document.getElementById("textDown").value, 10)
+	var textXShift = 0
+	var words = (text).split(" ")
 	var line = ""
-	var xShift = 0
-	var textSize = parseInt(document.getElementById("textSize").value)
-	y += paragraphDown
-	for(var n = 0; n < words.length; n++) {
-		//Special characters/fonts
-		if (words[n] == "<i>") {
-			card.fillText(line, x + xShift, y)
-			xShift += card.measureText(line).width
-			line = ""
-			canvas.style.letterSpacing = textFontSpacing * 1/3 + "px"
-			card.font = textSize + textFont + "i"
-		} else if (words[n] == "</i>") {
-			card.fillText(line, x + xShift, y)
-			xShift += card.measureText(line).width
-			line = ""
-			canvas.style.letterSpacing = textFontSpacing + "px"
-			card.font = "normal " + textSize + textFont
-		} else if (words[n] == "<line>") {
-			card.fillText(line, x + xShift, y)
-			line = ""
-			y += textSize + 1 + paragraphShift
-			xShift = 0
-		} else if (words[n] == "<lineNoSpace>") {
-			card.fillText(line, x + xShift, y)
-			line = ""
-			y += textSize + 1
-			xShift = 0
-		} else if (words[n].includes("<") && words[n].includes(">")) {
-			var splitWord = words[n].split("<")
-			aMax = words[n].length
-			for (var a = 0; a < aMax; a++) {
-				var extraSpace
-				if (words[n].charAt(0) == "<") {
-					card.fillText(line, x + xShift, y)
-					xShift += card.measureText(line).width
-					line = ""
-					if (extraSpace == true) {
-						xShift += 2
-					}
-					card.drawImage(manaSymbolImages[manaSymbolCode.indexOf(words[n].substring(words[n].indexOf("<") + 1, words[n].indexOf(">")))], x + xShift + textSize * 0.054, y + textSize * 0.11, textSize * 0.77, textSize * 0.77)
-					xShift += textSize * 0.84
-					words[n] = words[n].slice(words[n].indexOf(">") + 1, words[n].length)
-					extraSpace = true
-				} else {
-					line += words[n].charAt(0)
-					words[n] = words[n].slice(1, words[n].length)
-					extraSpace = false
-				}
-				if (a == aMax -1) {
-					line += " "
-				}
-			}
-		} else {
-			//REAL WORD
-			testLine = line + words[n]
-			var lineSize = card.measureText(testLine).width
-			if (lineSize + xShift + x > textWidth && n > 0) {
+	var tempTextWidth = textWidth
+	for (wordIndex = 0; wordIndex < words.length; wordIndex ++) {
+		if (words[wordIndex].includes("<") == false || words[wordIndex].includes(">") == false) {
+			//Just a regular old word
+			testLine = line + words[wordIndex]
+			var lineWidth = card.measureText(testLine).width
+			if (lineWidth + textXShift + x > tempTextWidth && wordIndex > 0) {
 				//Word is too big
-				card.fillText(line, x + xShift, y)
-				line = words[n] + " "
+				card.fillText(line, x + textXShift, y)
+				line = words[wordIndex] + " "
 				y += textSize + 1
-				xShift = 0
+				textXShift = 0
 			} else {
 				//Word fits
 				line = testLine + " "
-				if (n + 1 == words.length) {
-					card.fillText(line, x + xShift, y)
+			}
+			if (wordIndex + 1 == words.length) {
+					card.fillText(line, x + textXShift, y)
+			}
+		} else {
+			//Symbols and more!
+			var splitWord = words[wordIndex].split("<")
+			for (splitIndex = 0; splitIndex < splitWord.length; splitIndex ++) {
+				//Write what's there first!
+				card.fillText(line, x + textXShift, y)
+				textXShift += card.measureText(line).width
+				line = ""
+				if (splitWord[splitIndex].includes(">")) {
+					var plainWord = ""
+					var megaSplit = splitWord[splitIndex].split(">")
+					//series of if statements to determine an action based off of the given code
+					if (megaSplit[0] == "i") {
+						canvas.style.letterSpacing = textFontSpacing * 1/3 + "px"
+						card.font = textSize + textFont + "i"
+					} else if (megaSplit[0] == "/i") {
+						canvas.style.letterSpacing = textFontSpacing + "px"
+						card.font = "normal " + textSize + textFont
+					} else if (megaSplit[0] == "center") {
+						card.textAlign="center"
+						x = 749/2
+						tempTextWidth = textWidth * 1.5
+					} else if (megaSplit[0] == "right") {
+						card.textAlign="right"
+						tempTextWidth = textWidth * 1.9
+						x = 749 - xCoord
+					} else if (megaSplit[0] == "left") {
+						card.textAlign="left"
+						tempTextWidth = textWidth
+						x = xCoord
+					} else if (megaSplit[0] == "line") {
+						textXShift = 0
+						y += lineSpace + textSize + 1
+					} else if (megaSplit[0] == "lineNoSpace") {
+						textXShift = 0
+						y += textSize + 1
+					} else {
+						card.drawImage(manaSymbolImages[manaSymbolCode.indexOf(megaSplit[0])], x + textXShift + textSize * 0.054, y + textSize * 0.19, textSize * 0.77, textSize * 0.77)
+						textXShift += textSize * 0.84
+					}
+					if (megaSplit[1] != "") {
+						plainWord = megaSplit[1] + " "
+					} else if (splitIndex == splitWord.length - 1) {
+						line += " "
+					}
+				} else {
+					plainWord = splitWord[splitIndex]
+				}
+				if (plainWord != "") {
+					//After isolating the plain word, write it!
+					testLine = line + plainWord
+					var lineWidth = card.measureText(testLine).width
+					if (lineWidth + textXShift + x > tempTextWidth && wordIndex > 0) {
+						//Word is too big
+						card.fillText(line, x + textXShift, y)
+						line = plainWord
+						y += textSize + 1
+						textXShift = 0
+					} else {
+						//Word fits
+						line = testLine
+					}
+					if (wordIndex + 1 == words.length) {
+							card.fillText(line, x + textXShift, y)
+					}
 				}
 			}
 		}
 	}
 }
+
+
+
+
+
+
+
+
+
 
 //Toggles the visibility of predetermined sections of the input boxes
 function toggleVisibility(targetClass, self, selfClass, hiddenClass, shownClass) {
