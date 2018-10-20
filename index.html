@@ -70,7 +70,7 @@
 					<input id="textSize" type="number" min="0" max="100" value="37" step="0.5"></input>
 					<br/>
 					Pixels Between Paragraphs
-					<input id="textShift" type="number" min="0" max="300" value="0"></input>
+					<input id="textShift" type="number" min="0" max="300" value="13"></input>
 					<br/>
 					Shift All Text Down
 					<input id="textDown" type="number" min="0" max="300" value="0"></input>
@@ -400,7 +400,7 @@ for (i = 0; i < dynamicImageList.length; i ++) {
 	window[imgName] = new Image()
 }
 //Load static images
-var staticImageList = ["artistBrush", "foil", "stampGradient", "multiGradient", "rareStamp", "cardMask", "artMask"]
+var staticImageList = ["artistBrush", "foil", "stampGradient", "multiGradient", "rareStamp", "cardMask", "artMask", "bar"]
 for (i = 0; i < staticImageList.length; i ++) {
 	var imgName = "img" + staticImageList[i].charAt(0).toUpperCase() + staticImageList[i].slice(1)
 	window[imgName] = new Image()
@@ -644,7 +644,7 @@ function bottomInfoM15() {
 	} else {
 		card.fillStyle = "white"
 	}
-	var shiftInfo = 445
+	var shiftInfo = 442
 	canvas.style.letterSpacing = "0.8px"
 	card.font = "19.5px relaymedium"
 	var bottomLine = document.getElementById("inputSet").value + " \u00b7 " + document.getElementById("inputLanguage").value
@@ -655,23 +655,29 @@ function bottomInfoM15() {
 	card.font = "19.5px relaymedium"
 	card.fillText(document.getElementById("inputNumber").value, 49, m15InfoY - 20)
 	card.fillText(document.getElementById("inputRarity").value, artistBrushShift - 1, m15InfoY - 20)
-	if (445 < artistBrushShift  + card.measureText(document.getElementById("inputRarity").value).width && document.getElementById("creatureCheckbox").checked == false) {
+	if (442 < artistBrushShift  + card.measureText(document.getElementById("inputRarity").value).width && document.getElementById("creatureCheckbox").checked == false) {
 		shiftInfo = artistBrushShift  + card.measureText(document.getElementById("inputRarity").value).width + 5
 	}
 	canvas.style.letterSpacing = "-0.1px"
 	card.font = "24px matrixbsc"
 	card.fillText(document.getElementById("inputArtist").value, artistBrushShift + 21, m15InfoY + 2)
-	if (445 < artistBrushShift + 21 + card.measureText(document.getElementById("inputArtist").value).width && document.getElementById("creatureCheckbox").checked == true) {
+	if (442 < artistBrushShift + 21 + card.measureText(document.getElementById("inputArtist").value).width && document.getElementById("creatureCheckbox").checked == true) {
 		shiftInfo = artistBrushShift + card.measureText(document.getElementById("inputArtist").value).width + 26
 	}
 	//This is where "CC —" is hardcoded. The only reason is to prevent users from easily typing in the trademark and copyright that's usually on real cards. It's also there so I can see if a card was created with my program, it makes me feel good :)
 	if (document.getElementById("inputInfo").value != "") {
 		canvas.style.letterSpacing = "0px"
 		card.font = "17px mplantin"
+		var bottomInfo = "CC \u2014 " + document.getElementById("inputInfo").value
+		if (bottomInfo == "CC \u2014 secretcode") {
+			var date = new Date()
+			var year = date.getFullYear()
+			bottomInfo = "\u2122 & \u00a9 " + year + " Wizards of the Coast"
+		}
 		if (document.getElementById("creatureCheckbox").checked == true) {
-			card.fillText("CC \u2014 " + document.getElementById("inputInfo").value, shiftInfo, m15InfoY + 3)
+			card.fillText(bottomInfo, shiftInfo, m15InfoY + 3)
 		} else {
-			card.fillText("CC \u2014 " + document.getElementById("inputInfo").value, shiftInfo, m15InfoY - 17)
+			card.fillText(bottomInfo, shiftInfo, m15InfoY - 17)
 		}
 	}
 }
@@ -753,6 +759,10 @@ function drawText(text, xCoord, yCoord) {
 					} else if (megaSplit[0] == "lineNoSpace") {
 						textXShift = 0
 						y += textSize + 1
+					} else if (megaSplit[0] == "bar") {
+						card.drawImage(imgBar, canvas.width / 2 - imgBar.width / 2, y + textSize + lineSpace + 5)
+						textXShift = 0
+						y += 2 * lineSpace + textSize + 3
 					} else {
 						card.drawImage(manaSymbolImages[manaSymbolCode.indexOf(megaSplit[0])], x + textXShift + textSize * 0.054, y + textSize * 0.19, textSize * 0.77, textSize * 0.77)
 						textXShift += textSize * 0.84
@@ -786,16 +796,9 @@ function drawText(text, xCoord, yCoord) {
 			}
 		}
 	}
+	//Make things go back to normal :)
+	card.textAlign="left"
 }
-
-
-
-
-
-
-
-
-
 
 //Toggles the visibility of predetermined sections of the input boxes
 function toggleVisibility(targetClass, self, selfClass, hiddenClass, shownClass) {
