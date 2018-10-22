@@ -34,18 +34,22 @@
 					<br/>
 					<input type="checkbox" id="checkboxThirdColor" onchange="updateColor()">Third Color <select id="thirdColorSelection" onchange="updateColor()"></select></input>
 					<br/>
-					<input type="checkbox" id="creatureCheckbox" onchange="updateColor()">Power/Toughness
+					<input type="checkbox" id="checkboxCreature" onchange="updateColor()">Power/Toughness
 					<input id="inputPowerToughness" value="" type="text"></input>
 					<br/>
-					<input type="checkbox" id="legendaryCheckbox" onchange="updateColor()">Legendary</input>
+					<input type="checkbox" id="checkboxLegendary" onchange="updateColor()">Legendary</input>
 					<br/>
-					<input type="checkbox" id="rareStampCheckbox" onchange="updateColor()">Rare Stamp</input>
+					<input type="checkbox" id="checkboxNyx" onchange="updateColor()">Nyx</input>
 					<br/>
-					<input type="checkbox" id="silverBorderCheckbox">Silver Border</input>
+					<input type="checkbox" id="checkboxMiracle" onchange="updateColor()">Miracle</input>
+					<br/>
+					<input type="checkbox" id="checkboxRareStamp" onchange="updateColor()">Rare Stamp</input>
+					<br/>
+					<input type="checkbox" id="checkboxSilverBorder">Silver Border</input>
 					<br/>
 					<input type="color" id="inputColor"> Border Color</input>
 					<br/>
-					<input type="checkbox" id="foilCheckbox">Foil</input>
+					<input type="checkbox" id="checkboxFoil">Foil</input>
 					<br/>
 				</div>
 				<div class="toggle" onclick="toggleVisibility('nameCostType', this, 'toggleShown', 'hidden', 'shown')">Name, Mana Cost, Type</div>
@@ -111,12 +115,12 @@
 					Artist Credit
 					<input id="inputArtist" value="" type="text"></input>
 					<br/>
-					<input id="artistColor" type="checkbox">Make Artist Credit font black</input>
+					<input id="checkboxArtistColor" type="checkbox">Make Artist Credit font black</input>
 					<br/>
 				</div>
 				<div class="toggle" onclick="toggleVisibility('setSymbolWatermark', this, 'toggleShown', 'hidden', 'shown')">Set Symbol and Watermark</div>
 				<div class="setSymbolWatermark hidden">
-					<input type="checkbox" id="setSymbolCheckbox" checked="true">Set Symbol</input>
+					<input type="checkbox" id="checkboxSetSymbol" checked="true">Set Symbol</input>
 					<br>
 					Set Code
 					<input type="text" onchange="loadSetSymbol()" value="HM" id="setSymbolCode"></input>
@@ -130,7 +134,7 @@
 					Scale Set Symbol
 					<input id="setSymbolSize" type="number" value="100" step="0.5"></input>
 					<br/><br/>
-					<input type="checkbox" id="watermarkCheckbox" checked="true"></input>
+					<input type="checkbox" id="checkboxWatermark" checked="true"></input>
 					Watermark
 					<input type="file" accept="image/*" onchange="loadImage(event, imgWatermark, true)" id="inputWatermark"></input>
 					<br/>
@@ -386,15 +390,15 @@ a:active {
 
 
 <script>
+//Load the initial border (m15)
+changeBorder()
 //set up initial variables
-loadScript("data/borders/m15/border.js")
 var borderPath
-var m15Info = true
 //set up canvas
 var canvas = document.getElementById("canvas")
 var card = canvas.getContext("2d")
 //Load dynamic images
-var dynamicImageList = ["borderColor", "secondBorderColor", "thirdBorderColor", "borderCreature", "secondBorderCreature", "thirdBorderCreature", "borderLegendary", "secondBorderLegendary", "thirdBorderLegendary", "borderRareStamp", "secondBorderRareStamp", "art", "setSymbol", "watermark", "multiMask", "LegendMultiMask", "rareStampMask", "frameMask", "legendFrameMask", "borderMask"]
+var dynamicImageList = ["borderColor", "secondBorderColor", "thirdBorderColor", "borderCreature", "secondBorderCreature", "thirdBorderCreature", "borderLegendary", "secondBorderLegendary", "thirdBorderLegendary", "borderRareStamp", "secondBorderRareStamp", "art", "setSymbol", "watermark", "multiMask", "LegendMultiMask", "rareStampMask", "frameMask", "legendFrameMask", "borderMask", "borderNyx", "secondBorderNyx", "thirdBorderNyx", "borderMiracle", "secondBorderMiracle", "thirdBorderMiracle"]
 for (i = 0; i < dynamicImageList.length; i ++) {
 	var imgName = "img" + dynamicImageList[i].charAt(0).toUpperCase() + dynamicImageList[i].slice(1)
 	window[imgName] = new Image()
@@ -421,21 +425,23 @@ loadSetSymbol()
 //fill second watermark dropdown menu
 document.getElementById("secondWatermarkColorSelection").innerHTML = document.getElementById("watermarkColorSelection").innerHTML
 
-
 //Runs ten times every second (main loop)
-changeBorder()
 setInterval(function() {
 		//Insures that the corners of the final image are transparent
 		card.globalCompositeOperation = "source-over"
 		drawMask(document.getElementById("inputColor").value, 0, 0, canvas.width, canvas.height, imgCardMask, false, false)
 		card.globalCompositeOperation = "source-atop"
-		//These functions draw everything
+		//Draws the card image, then...
 		drawPicture()
+		//redraws the colored border in case the image is too big.
 		drawMask(document.getElementById("inputColor").value, 0, 0, canvas.width, canvas.height, imgCardMask, imgArtMask, false)
+		//draws the card frames
 		drawBorder()
+		//draws the set symbol, mana cost, and watermark
 		drawSetSymbol()
 		drawManaCost()
 		drawWatermark()
+		//writes all the text. name, type, rules...
 		writeText()
 		//m15 and 8th edition have different info at the bottom of the cards and require completely different functions
 		if (m15Info == true) {
@@ -445,7 +451,7 @@ setInterval(function() {
 			bottomInfo8th()
 		}
 		//A shiny foil overlay!
-		if(document.getElementById("foilCheckbox").checked == true) {
+		if(document.getElementById("checkboxFoil").checked == true) {
 			card.drawImage(imgFoil, 0, 0, canvas.width, canvas.height)
 		}
 		//These are for pinpointing coordinates while adjusting values for new border types
@@ -465,8 +471,7 @@ setInterval(function() {
 //The two following functions load different types of borders
 function changeBorder() {
 	//the loadScript function is located in data/scripts/loadScript.js. It sets values to variables such as set symbol coordinates or title font
-	borderPath = "data/borders/" + document.getElementById("borderSelection").value
-	loadScript(borderPath + "border.js")
+	loadScript("data/borders/defaultBorder.js")
 }
 function updateBorder() {
 	//This is a seperate function to insure that the border.js file finishes running before running a few last commands
@@ -486,18 +491,33 @@ function updateBorder() {
 //Loads the images for the card frame, power toughness box, and rare stamp
 function updateColor() {
 	borderPath = "data/borders/" + document.getElementById("borderSelection").value
-	imgBorderColor.src = borderPath + document.getElementById("colorSelection").value + "/frame.png"
-	imgSecondBorderColor.src = borderPath + document.getElementById("secondColorSelection").value + "/frame.png"
-	imgThirdBorderColor.src = borderPath + document.getElementById("thirdColorSelection").value + "/frame.png"
-	imgBorderCreature.src = borderPath + document.getElementById("colorSelection").value + "/pt.png"
-	imgSecondBorderCreature.src = borderPath + document.getElementById("secondColorSelection").value + "/pt.png"
-	imgThirdBorderCreature.src = borderPath + document.getElementById("thirdColorSelection").value + "/pt.png"
-	if (m15Info == true) {
-		imgBorderLegendary.src = borderPath + document.getElementById("colorSelection").value + "/legendary.png"
-		imgSecondBorderLegendary.src = borderPath + document.getElementById("secondColorSelection").value + "/legendary.png"
-		imgThirdBorderLegendary.src = borderPath + document.getElementById("thirdColorSelection").value + "/legendary.png"
-		imgBorderRareStamp.src = borderPath + document.getElementById("colorSelection").value + "/stamp.png"
-		imgSecondBorderRareStamp.src = borderPath + document.getElementById("secondColorSelection").value + "/stamp.png"
+	var firstColor = borderPath + document.getElementById("colorSelection").value
+	var secondColor = borderPath + document.getElementById("secondColorSelection").value
+	var thirdColor = borderPath + document.getElementById("thirdColorSelection").value
+	imgBorderColor.src = firstColor + "/frame.png"
+	imgSecondBorderColor.src = secondColor + "/frame.png"
+	imgThirdBorderColor.src = thirdColor + "/frame.png"
+	imgBorderCreature.src = firstColor + "/pt.png"
+	imgSecondBorderCreature.src = secondColor + "/pt.png"
+	imgThirdBorderCreature.src = thirdColor + "/pt.png"
+	if (legendaryBorder == true) {
+		imgBorderLegendary.src = firstColor + "/legendary.png"
+		imgSecondBorderLegendary.src = secondColor + "/legendary.png"
+		imgThirdBorderLegendary.src = thirdColor + "/legendary.png"
+	}
+	if (stampBorder == true) {
+		imgBorderRareStamp.src = firstColor + "/stamp.png"
+		imgSecondBorderRareStamp.src = secondColor + "/stamp.png"
+	}
+	if (nyxBorder == true) {
+		imgBorderNyx.src = firstColor + "/nyx.png"
+		imgSecondBorderNyx.src = secondColor + "/nyx.png"
+		imgThirdBorderNyx.src = thirdColor + "/nyx.png"
+	}
+	if (miracleBorder == true) {
+		imgBorderMiracle.src = firstColor + "/miracle.png"
+		imgSecondBorderMiracle.src = secondColor + "/miracle.png"
+		imgThirdBorderMiracle.src = thirdColor + "/miracle.png"
 	}
 }
 //Draw Picture
@@ -514,42 +534,70 @@ function drawPicture() {
 //Draw Border
 function drawBorder() {
 	//These if else statements check to see whether or not to draw different parts of the card, like the legendary border or rare stamp, and draws them in the appropriate order such that when multiple border colors are used the gradients overlap correctly
-	if (document.getElementById("legendaryCheckbox").checked == true && m15Info == true) {
+	//MAIN CARD FRAME
+	drawMask(imgBorderColor, 0, 0, canvas.width, canvas.height, imgFrameMask, false, false)
+	if (document.getElementById("checkboxSecondColor").checked == true) {
+		drawMask(imgSecondBorderColor, 0, 0, canvas.width, canvas.height, imgFrameMask, imgMultiGradient, "reverseSecond")
+	}
+	if (document.getElementById("checkboxThirdColor").checked == true) {
+		drawMask(imgThirdBorderColor, 0, 0, canvas.width, canvas.height, imgFrameMask, imgMultiMask, false)
+	}
+	//Draws the silver border usually on un-cards
+	if (document.getElementById("checkboxSilverBorder").checked == true) {
+		drawMask("#a3aeb7", 0, 0, canvas.width, canvas.height, imgBorderMask, imgFrameMask, "reverseSecond")
+	}
+	//RARE STAMP
+	if (document.getElementById("checkboxRareStamp").checked == true && stampBorder == true) {
+		card.drawImage(imgBorderRareStamp, 329, rareStampY - 15, 90, 50)
+
+		if (document.getElementById("checkboxSecondColor").checked == true) {
+			drawMask(imgSecondBorderRareStamp, 329, rareStampY - 15, 90, 50, imgSecondBorderRareStamp, imgStampGradient, "reverseSecond")
+		}
+		//Draws over the rare stamp (part that's usually back) to match custom border color
+		drawMask(document.getElementById("inputColor").value, 329, rareStampY - 15, 90, 50, imgRareStampMask, false, false)
+		//This is when the holo stamp is drawn
+		card.drawImage(imgRareStamp, 340, rareStampY, 70, 37)
+	}
+	//NYX
+	if (document.getElementById("checkboxNyx").checked == true && nyxBorder == true) {
+		if (document.getElementById("checkboxThirdColor").checked == true) {
+			drawMask(imgThirdBorderNyx, 0, 0, canvas.width, canvas.height, imgFrameMask, imgMultiMask, false)
+		} else {
+			drawMask(imgBorderNyx, 0, 0, canvas.width, canvas.height, imgFrameMask, false, false)
+			if (document.getElementById("checkboxSecondColor").checked == true) {
+				drawMask(imgSecondBorderNyx, 0, 0, canvas.width, canvas.height, imgFrameMask, imgMultiGradient, "reverseSecond")
+			}
+		}	
+	}
+	//MIRACLE
+	if (document.getElementById("checkboxMiracle").checked == true && miracleBorder == true) {
+		if (document.getElementById("checkboxThirdColor").checked == true) {
+			drawMask(imgThirdBorderMiracle, 0, 0, canvas.width, canvas.height, imgFrameMask, false, false)
+		} else {
+			drawMask(imgBorderMiracle, 0, 0, canvas.width, canvas.height, imgFrameMask, false, false)
+			if (document.getElementById("checkboxSecondColor").checked == true) {
+				drawMask(imgSecondBorderMiracle, 0, 0, canvas.width, canvas.height, imgFrameMask, imgMultiGradient, "reverseSecond")
+			}
+		}
+	}
+	//LEGENDARY
+	if (document.getElementById("checkboxLegendary").checked == true && legendaryBorder == true) {
 		drawMask(imgBorderLegendary, 0, 0, canvas.width, canvas.height, imgLegendFrameMask, false, false)
 		if (document.getElementById("checkboxSecondColor").checked == true) {
 			drawMask(imgSecondBorderLegendary, 0, 0, canvas.width, canvas.height, imgLegendFrameMask, imgMultiGradient, "reverseSecond")
 		}
-		if (document.getElementById("checkboxThirdColor").checked == true) {
-			drawMask(imgThirdBorderColor, 0, 0, canvas.width, canvas.height, imgLegendFrameMask, imgLegendMultiMask)
-		}
-		if (document.getElementById("silverBorderCheckbox").checked == true) {
+		//redraws the custom-color border to match the legendary frame
+		drawMask(document.getElementById("inputColor").value, 0, 0, canvas.width, canvas.height, imgBorderMask, imgLegendFrameMask, "reverseSecond")
+		//redraws the silver border usually on un-cards to match the legendary frame
+		if (document.getElementById("checkboxSilverBorder").checked == true) {
 			drawMask("#a3aeb7", 0, 0, canvas.width, canvas.height, imgBorderMask, imgLegendFrameMask, "reverseSecond")
 		}
-	} else {
-		drawMask(imgBorderColor, 0, 0, canvas.width, canvas.height, imgFrameMask, false, false)
-		if (document.getElementById("checkboxSecondColor").checked == true) {
-			drawMask(imgSecondBorderColor, 0, 0, canvas.width, canvas.height, imgFrameMask, imgMultiGradient, "reverseSecond")
-		}
-		if (document.getElementById("checkboxThirdColor").checked == true) {
-			drawMask(imgThirdBorderColor, 0, 0, canvas.width, canvas.height, imgFrameMask, imgMultiMask, false)
-		}
-		if (document.getElementById("silverBorderCheckbox").checked == true) {
-			drawMask("#a3aeb7", 0, 0, canvas.width, canvas.height, imgBorderMask, imgFrameMask, "reverseSecond")
-		}
-	}
-	if (document.getElementById("rareStampCheckbox").checked == true && m15Info == true) {
-		card.drawImage(imgBorderRareStamp, 329, rareStampY - 15, 90, 50)
-		if (document.getElementById("checkboxSecondColor").checked == true) {
-			drawMask(imgSecondBorderRareStamp, 329, rareStampY - 15, 90, 50, imgSecondBorderRareStamp, imgStampGradient, "reverseSecond")
-		}
-		drawMask(document.getElementById("inputColor").value, 329, rareStampY - 15, 90, 50, imgRareStampMask, false, false)
-		card.drawImage(imgRareStamp, 340, rareStampY, 70, 37)
 	}
 }
 //Draw Set Symbol
 function drawSetSymbol() {
 	//scales the set symbol so that it fits in the correct area and centers it
-	if (imgSetSymbol.src != "" && document.getElementById("setSymbolCheckbox").checked == true) {
+	if (imgSetSymbol.src != "" && document.getElementById("checkboxSetSymbol").checked == true) {
 		var height = setSymbolHeight
 		var width = imgSetSymbol.width * (height / imgSetSymbol.height)
 		if (width > setSymbolWidth) {
@@ -566,7 +614,7 @@ function drawSetSymbol() {
 //Draw Watermark
 function drawWatermark() {
 	//The watermark is centered/scaled just like the set symbol
-	if (imgWatermark.src != "" && document.getElementById("watermarkCheckbox").checked == true) {
+	if (imgWatermark.src != "" && document.getElementById("checkboxWatermark").checked == true) {
 		var height = watermarkHeight
 		var width = imgWatermark.width * (height / imgWatermark.height)
 		if (width > watermarkWidth) {
@@ -623,7 +671,7 @@ function writeText() {
 	var text = document.getElementById("inputText").value
 	drawText(text, textX, textY)
 	//Power/Toughness
-	if (document.getElementById("creatureCheckbox").checked == true) {
+	if (document.getElementById("checkboxCreature").checked == true) {
 		if (document.getElementById("checkboxThirdColor").checked == true) {
 			card.drawImage(imgThirdBorderCreature, ptX, ptY, ptWidth, ptHeight)
 		} else if (document.getElementById("checkboxSecondColor").checked == true) {
@@ -639,7 +687,7 @@ function writeText() {
 }
 //Bottom info on M15 cards
 function bottomInfoM15() {
-	if (document.getElementById("artistColor").checked == true) {
+	if (document.getElementById("checkboxArtistColor").checked == true) {
 		card.fillStyle = "black"
 	} else {
 		card.fillStyle = "white"
@@ -655,13 +703,13 @@ function bottomInfoM15() {
 	card.font = "19.5px relaymedium"
 	card.fillText(document.getElementById("inputNumber").value, 49, m15InfoY - 20)
 	card.fillText(document.getElementById("inputRarity").value, artistBrushShift - 1, m15InfoY - 20)
-	if (442 < artistBrushShift  + card.measureText(document.getElementById("inputRarity").value).width && document.getElementById("creatureCheckbox").checked == false) {
+	if (442 < artistBrushShift  + card.measureText(document.getElementById("inputRarity").value).width && document.getElementById("checkboxCreature").checked == false) {
 		shiftInfo = artistBrushShift  + card.measureText(document.getElementById("inputRarity").value).width + 5
 	}
 	canvas.style.letterSpacing = "-0.1px"
 	card.font = "24px matrixbsc"
 	card.fillText(document.getElementById("inputArtist").value, artistBrushShift + 21, m15InfoY + 2)
-	if (442 < artistBrushShift + 21 + card.measureText(document.getElementById("inputArtist").value).width && document.getElementById("creatureCheckbox").checked == true) {
+	if (442 < artistBrushShift + 21 + card.measureText(document.getElementById("inputArtist").value).width && document.getElementById("checkboxCreature").checked == true) {
 		shiftInfo = artistBrushShift + card.measureText(document.getElementById("inputArtist").value).width + 26
 	}
 	//This is where "CC —" is hardcoded. The only reason is to prevent users from easily typing in the trademark and copyright that's usually on real cards. It's also there so I can see if a card was created with my program, it makes me feel good :)
@@ -674,7 +722,7 @@ function bottomInfoM15() {
 			var year = date.getFullYear()
 			bottomInfo = "\u2122 & \u00a9 " + year + " Wizards of the Coast"
 		}
-		if (document.getElementById("creatureCheckbox").checked == true) {
+		if (document.getElementById("checkboxCreature").checked == true) {
 			card.fillText(bottomInfo, shiftInfo, m15InfoY + 3)
 		} else {
 			card.fillText(bottomInfo, shiftInfo, m15InfoY - 17)
@@ -683,7 +731,7 @@ function bottomInfoM15() {
 }
 //Bottom info on 8th edition cards
 function bottomInfo8th() {
-	if (document.getElementById("artistColor").checked == true) {
+	if (document.getElementById("checkboxArtistColor").checked == true) {
 		card.fillStyle = "black"
 	} else {
 		card.fillStyle = "white"
