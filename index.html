@@ -152,6 +152,7 @@
 					<input type="checkbox" id="checkboxSecondWatermarkColor"> Second Watermark Color <select id="secondWatermarkColorSelection"></select></input>
 					<br/>
 				</div>
+				<div class="toggle" onclick="downloadCardImage()" id="downloadCardImage" href="" download="card.jpg">Download</div>
 			</div>
 		</div>
 	</div>
@@ -865,6 +866,13 @@ function toggleVisibility(targetClass, self, selfClass, hiddenClass, shownClass)
 //runs the autocrop function for the chosen set symbol
 function loadSetSymbol() {
 	imgSetSymbol.src = "https://raw.githubusercontent.com/ImKyle4815/MTG-Set-Symbols/master/setSymbols/" + document.getElementById("setSymbolCode").value.toUpperCase() + "_" + document.getElementById("setSymbolRarity").value.toUpperCase() + ".png"
+}
+
+//Best for last - downloads the image!
+function downloadCardImage(el) {
+	alert("This may not work because the canvas is 'tainted' - if you know how to avoid this please tell me :)")
+	var cardImageData = canvas.toDataURL("image/jpg")
+	el.href = cardImageData
 }
 </script>
 <html>
