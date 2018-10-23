@@ -6,6 +6,7 @@ var legendaryBorder = false
 var nyxBorder = false
 var miracleBorder = false
 var stampBorder = false
+var flipBorder = false
 //Loads the correct border data
 borderPath = "data/borders/" + document.getElementById("borderSelection").value
 loadScript(borderPath + "border.js")

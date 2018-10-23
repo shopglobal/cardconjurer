@@ -54,6 +54,7 @@ legendaryBorder = true
 stampBorder = true
 nyxBorder = true
 miracleBorder = true
+flipBorder = true
 //With all the new values in place, the program will update it's border images
 updateBorder()
 //Any special functions go at the bottom
