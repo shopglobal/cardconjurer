@@ -45,6 +45,21 @@
 					<br/>
 					<input type="checkbox" id="checkboxRareStamp" onchange="updateColor()">Rare Stamp</input>
 					<br/>
+					<input type="checkbox" id="checkboxFlipIcon" onchange="updateColor()">Flip Icon <select id="inputFlipIcon" onchange="updateColor()">
+						<option value="blank.png">Blank</option>
+						<option value="day.png">Day</option>
+						<option value="night.png">Night</option>
+						<option value="compass.png">Compass</option>
+						<option value="moon.png">Moon</option>
+						<option value="eldrazi.png">Eldrazi</option>
+						<option value="planeswalker.png">Planeswalker</option>
+					</select></input>
+					<br/>
+					<input type="checkbox" id="checkboxFlipTip" onchange="updateColor()">Flip Tip
+					<input id="inputFlipTip" value="" type="text"></input>
+					<br/>
+					<input type="checkbox" id="checkboxFlippedDark" onchange="updateColor()">Flipped (Darker)</input>
+					<br/>
 					<input type="checkbox" id="checkboxSilverBorder">Silver Border</input>
 					<br/>
 					<input type="color" id="inputColor"> Border Color</input>
@@ -395,11 +410,14 @@ a:active {
 changeBorder()
 //set up initial variables
 var borderPath
+var secondColor
+var thirdColor
+var titleRightShift = 0
 //set up canvas
 var canvas = document.getElementById("canvas")
 var card = canvas.getContext("2d")
 //Load dynamic images
-var dynamicImageList = ["borderColor", "secondBorderColor", "thirdBorderColor", "borderCreature", "secondBorderCreature", "thirdBorderCreature", "borderLegendary", "secondBorderLegendary", "thirdBorderLegendary", "borderRareStamp", "secondBorderRareStamp", "art", "setSymbol", "watermark", "multiMask", "LegendMultiMask", "rareStampMask", "frameMask", "legendFrameMask", "borderMask", "borderNyx", "secondBorderNyx", "thirdBorderNyx", "borderMiracle", "secondBorderMiracle", "thirdBorderMiracle"]
+var dynamicImageList = ["borderColor", "secondBorderColor", "thirdBorderColor", "borderCreature", "borderLegendary", "secondBorderLegendary", "borderRareStamp", "secondBorderRareStamp", "art", "setSymbol", "watermark", "multiMask", "rareStampMask", "frameMask", "legendFrameMask", "borderMask", "borderNyx", "secondBorderNyx", "borderMiracle", "secondBorderMiracle", "borderFlipIcon", "borderFlipCircle", "borderFlipTip", "borderDarkTitle", "secondBorderDarkTitle"]
 for (i = 0; i < dynamicImageList.length; i ++) {
 	var imgName = "img" + dynamicImageList[i].charAt(0).toUpperCase() + dynamicImageList[i].slice(1)
 	window[imgName] = new Image()
@@ -457,10 +475,10 @@ setInterval(function() {
 		}
 		//These are for pinpointing coordinates while adjusting values for new border types
 		//Vertical Line
-		//card.beginPath()
-		//card.moveTo(setSymbolRight, 0)
-		//card.lineTo(setSymbolRight, 1044)
-		//card.stroke()
+		// card.beginPath()
+		// card.moveTo(688, 0)
+		// card.lineTo(688, 1044)
+		// card.stroke()
 		//Horizontal Line
 		//card.beginPath()
 		//card.moveTo(0, setSymbolY)
@@ -481,7 +499,6 @@ function updateBorder() {
 	imgFrameMask.src = borderPath + "frameMask.png"
 	if (m15Info == true) {
 		imgLegendFrameMask.src = borderPath + "legendFrameMask.png"
-		imgLegendMultiMask.src = borderPath + "legendMultiMask.png"
 		imgRareStampMask.src = borderPath + "rareStampMask.png"
 		imgBorderMask.src = borderPath + "borderMask.png"
 	} else if (eighthInfo == true) {
@@ -492,33 +509,70 @@ function updateBorder() {
 //Loads the images for the card frame, power toughness box, and rare stamp
 function updateColor() {
 	borderPath = "data/borders/" + document.getElementById("borderSelection").value
-	var firstColor = borderPath + document.getElementById("colorSelection").value
-	var secondColor = borderPath + document.getElementById("secondColorSelection").value
-	var thirdColor = borderPath + document.getElementById("thirdColorSelection").value
-	imgBorderColor.src = firstColor + "/frame.png"
-	imgSecondBorderColor.src = secondColor + "/frame.png"
-	imgThirdBorderColor.src = thirdColor + "/frame.png"
-	imgBorderCreature.src = firstColor + "/pt.png"
-	imgSecondBorderCreature.src = secondColor + "/pt.png"
-	imgThirdBorderCreature.src = thirdColor + "/pt.png"
+	secondColor = document.getElementById("checkboxSecondColor").checked
+	thirdColor = document.getElementById("checkboxThirdColor").checked
+	var firstColorPath = borderPath + document.getElementById("colorSelection").value
+	var secondColorPath = borderPath + document.getElementById("secondColorSelection").value
+	var thirdColorPath = borderPath + document.getElementById("thirdColorSelection").value
+	var altframe = ""
+	if (document.getElementById("checkboxFlippedDark").checked == true && flipBorder == true) {
+		altframe = "dark"
+	} else {
+		altframe = ""
+	}
+	imgBorderColor.src = firstColorPath + "/" +  altframe + "frame.png"
+	imgSecondBorderColor.src = secondColorPath + "/" +  altframe + "frame.png"
+	imgThirdBorderColor.src = thirdColorPath + "/" +  altframe + "frame.png"
+	if (thirdColor == true) {
+		imgBorderCreature.src = thirdColorPath + "/" +  altframe + "pt.png"
+	} else if (secondColor == true) {
+		imgBorderCreature.src = secondColorPath + "/" +  altframe + "pt.png"
+	} else {
+		imgBorderCreature.src = firstColorPath + "/" +  altframe + "pt.png"
+	}
 	if (legendaryBorder == true) {
-		imgBorderLegendary.src = firstColor + "/legendary.png"
-		imgSecondBorderLegendary.src = secondColor + "/legendary.png"
-		imgThirdBorderLegendary.src = thirdColor + "/legendary.png"
+		imgBorderLegendary.src = firstColorPath + "/legendary.png"
+		imgSecondBorderLegendary.src = secondColorPath + "/legendary.png"
 	}
 	if (stampBorder == true) {
-		imgBorderRareStamp.src = firstColor + "/stamp.png"
-		imgSecondBorderRareStamp.src = secondColor + "/stamp.png"
+		imgBorderRareStamp.src = firstColorPath + "/stamp.png"
+		imgSecondBorderRareStamp.src = secondColorPath + "/stamp.png"
 	}
 	if (nyxBorder == true) {
-		imgBorderNyx.src = firstColor + "/nyx.png"
-		imgSecondBorderNyx.src = secondColor + "/nyx.png"
-		imgThirdBorderNyx.src = thirdColor + "/nyx.png"
+		if (thirdColor == true) {
+			imgBorderNyx.src = thirdColorPath + "/nyx.png"
+		} else {
+			imgBorderNyx.src = firstColorPath + "/nyx.png"
+			imgSecondBorderNyx.src = secondColorPath + "/nyx.png"
+		}
 	}
 	if (miracleBorder == true) {
-		imgBorderMiracle.src = firstColor + "/miracle.png"
-		imgSecondBorderMiracle.src = secondColor + "/miracle.png"
-		imgThirdBorderMiracle.src = thirdColor + "/miracle.png"
+		if (thirdColor == true) {
+			imgBorderMiracle.src = thirdColorPath + "/" +  altframe + "miracle.png"
+		} else {
+			imgBorderMiracle.src = firstColorPath + "/" +  altframe + "miracle.png"
+			imgSecondBorderMiracle.src = secondColorPath + "/" +  altframe + "miracle.png"
+		}
+	}
+	if (flipBorder == true) {
+		if (thirdColor == true) {
+			imgBorderDarkTitle.src = thirdColorPath + "/darkTitle.png"
+		} else {
+			imgBorderDarkTitle.src = firstColorPath + "/darkTitle.png"
+			if (secondColor == true) {
+				imgSecondBorderDarkTitle.src = secondColorPath + "/darkTitle.png"
+			}
+		}
+		if (secondColor == true) {
+			imgBorderFlipTip.src = secondColorPath + "/flipTip.png"
+		} else {
+			imgBorderFlipTip.src = firstColorPath + "/flipTip.png"
+		}
+		titleRightShift = 50
+		imgBorderFlipCircle.src = firstColorPath + "/flipCircle.png"
+		imgBorderFlipIcon.src = "data/borders/icons/" + document.getElementById("inputFlipIcon").value
+	} else {
+		titleRightShift = 0
 	}
 }
 //Draw Picture
@@ -537,10 +591,10 @@ function drawBorder() {
 	//These if else statements check to see whether or not to draw different parts of the card, like the legendary border or rare stamp, and draws them in the appropriate order such that when multiple border colors are used the gradients overlap correctly
 	//MAIN CARD FRAME
 	drawMask(imgBorderColor, 0, 0, canvas.width, canvas.height, imgFrameMask, false, false)
-	if (document.getElementById("checkboxSecondColor").checked == true) {
+	if (secondColor == true) {
 		drawMask(imgSecondBorderColor, 0, 0, canvas.width, canvas.height, imgFrameMask, imgMultiGradient, "reverseSecond")
 	}
-	if (document.getElementById("checkboxThirdColor").checked == true) {
+	if (thirdColor == true) {
 		drawMask(imgThirdBorderColor, 0, 0, canvas.width, canvas.height, imgFrameMask, imgMultiMask, false)
 	}
 	//Draws the silver border usually on un-cards
@@ -561,22 +615,22 @@ function drawBorder() {
 	}
 	//NYX
 	if (document.getElementById("checkboxNyx").checked == true && nyxBorder == true) {
-		if (document.getElementById("checkboxThirdColor").checked == true) {
-			drawMask(imgThirdBorderNyx, 0, 0, canvas.width, canvas.height, imgFrameMask, imgMultiMask, false)
+		if (thirdColor == true) {
+			drawMask(imgBorderNyx, 0, 0, canvas.width, canvas.height, imgFrameMask, imgMultiMask, false)
 		} else {
 			drawMask(imgBorderNyx, 0, 0, canvas.width, canvas.height, imgFrameMask, false, false)
-			if (document.getElementById("checkboxSecondColor").checked == true) {
+			if (secondColor == true) {
 				drawMask(imgSecondBorderNyx, 0, 0, canvas.width, canvas.height, imgFrameMask, imgMultiGradient, "reverseSecond")
 			}
 		}	
 	}
 	//MIRACLE
 	if (document.getElementById("checkboxMiracle").checked == true && miracleBorder == true) {
-		if (document.getElementById("checkboxThirdColor").checked == true) {
-			drawMask(imgThirdBorderMiracle, 0, 0, canvas.width, canvas.height, imgFrameMask, false, false)
+		if (thirdColor == true) {
+			drawMask(imgBorderMiracle, 0, 0, canvas.width, canvas.height, imgFrameMask, false, false)
 		} else {
 			drawMask(imgBorderMiracle, 0, 0, canvas.width, canvas.height, imgFrameMask, false, false)
-			if (document.getElementById("checkboxSecondColor").checked == true) {
+			if (secondColor == true) {
 				drawMask(imgSecondBorderMiracle, 0, 0, canvas.width, canvas.height, imgFrameMask, imgMultiGradient, "reverseSecond")
 			}
 		}
@@ -584,7 +638,7 @@ function drawBorder() {
 	//LEGENDARY
 	if (document.getElementById("checkboxLegendary").checked == true && legendaryBorder == true) {
 		drawMask(imgBorderLegendary, 0, 0, canvas.width, canvas.height, imgLegendFrameMask, false, false)
-		if (document.getElementById("checkboxSecondColor").checked == true) {
+		if (secondColor == true) {
 			drawMask(imgSecondBorderLegendary, 0, 0, canvas.width, canvas.height, imgLegendFrameMask, imgMultiGradient, "reverseSecond")
 		}
 		//redraws the custom-color border to match the legendary frame
@@ -594,6 +648,28 @@ function drawBorder() {
 			drawMask("#a3aeb7", 0, 0, canvas.width, canvas.height, imgBorderMask, imgLegendFrameMask, "reverseSecond")
 		}
 	}
+	//FLIP CARDS
+	if (document.getElementById("checkboxFlipIcon").checked == true && flipBorder == true) {
+		card.drawImage(imgBorderFlipCircle, 0, 0, canvas.width, canvas.height)
+		card.drawImage(imgBorderFlipIcon, 39, 51, 60, 60)
+	}
+	if (document.getElementById("checkboxFlipTip").checked == true && flipBorder == true) {
+		card.drawImage(imgBorderFlipTip, 0, 0, canvas.width, canvas.height)
+		card.fillStyle="#666"
+		canvas.style.letterSpacing = "0px"
+		card.font = "28px belerenb"
+		card.fillText(document.getElementById("inputFlipTip").value, 688 - card.measureText(document.getElementById("inputFlipTip").value).width, 880)
+	}
+	// if (document.getElementById("checkboxFlippedDark").checked == true && flipBorder == true) {
+	// 	if (thirdColor == true) {
+	// 		drawMask(imgBorderDarkTitle, 0, 0, canvas.width, canvas.height, imgFrameMask, false, false)
+	// 	} else {
+	// 		drawMask(imgBorderDarkTitle, 0, 0, canvas.width, canvas.height, imgFrameMask, false, false)
+	// 		if (secondColor == true) {
+	// 			drawMask(imgSecondBorderDarkTitle, 0, 0, canvas.width, canvas.height, imgFrameMask, imgMultiGradient, "reverseSecond")
+	// 		}
+	// 	}
+	// }
 }
 //Draw Set Symbol
 function drawSetSymbol() {
@@ -661,7 +737,7 @@ function writeText() {
 	//Title
 	canvas.style.letterSpacing = titleFontSpacing
 	card.font = titleFont	
-	card.fillText(document.getElementById("inputName").value, titleX, titleY)
+	card.fillText(document.getElementById("inputName").value, titleX + titleRightShift, titleY)
 	//Type
 	canvas.style.letterSpacing = typeFontSpacing
 	card.font = typeFont
@@ -673,13 +749,7 @@ function writeText() {
 	drawText(text, textX, textY)
 	//Power/Toughness
 	if (document.getElementById("checkboxCreature").checked == true) {
-		if (document.getElementById("checkboxThirdColor").checked == true) {
-			card.drawImage(imgThirdBorderCreature, ptX, ptY, ptWidth, ptHeight)
-		} else if (document.getElementById("checkboxSecondColor").checked == true) {
-			card.drawImage(imgSecondBorderCreature, ptX, ptY, ptWidth, ptHeight)
-		} else {
-			card.drawImage(imgBorderCreature, ptX, ptY, ptWidth, ptHeight)
-		}
+		card.drawImage(imgBorderCreature, ptX, ptY, ptWidth, ptHeight)
 		canvas.style.letterSpacing = ptFontSpacing
 		card.font = ptFont
 		powerToughness = document.getElementById("inputPowerToughness").value
@@ -770,7 +840,7 @@ function drawText(text, xCoord, yCoord) {
 				line = testLine + " "
 			}
 			if (wordIndex + 1 == words.length) {
-					card.fillText(line, x + textXShift, y)
+				card.fillText(line, x + textXShift, y)
 			}
 		} else {
 			//Symbols and more!
@@ -839,7 +909,7 @@ function drawText(text, xCoord, yCoord) {
 						line = testLine
 					}
 					if (wordIndex + 1 == words.length) {
-							card.fillText(line, x + textXShift, y)
+						card.fillText(line, x + textXShift, y)
 					}
 				}
 			}
@@ -870,8 +940,8 @@ function loadSetSymbol() {
 
 //Best for last - downloads the image!
 function downloadCardImage(el) {
-	alert("This may not work because the canvas is 'tainted' - if you know how to avoid this please tell me :)")
-	var cardImageData = canvas.toDataURL("image/jpg")
+	alert("This may not work because the canvas is 'tainted' - if you know how to avoid this please tell me")
+	var cardImageData = canvas.toDataURL()
 	el.href = cardImageData
 }
 </script>
