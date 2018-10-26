@@ -58,6 +58,8 @@
 					<input type="checkbox" id="checkboxFlipTip" onchange="updateColor()">Flip Tip
 					<input id="inputFlipTip" value="" type="text"></input>
 					<br/>
+					<input type="checkbox" id="checkboxFlippedDark" onchange="updateColor()">Flipped (Darker)</input>
+					<br/>
 					<input type="checkbox" id="checkboxSilverBorder">Silver Border</input>
 					<br/>
 					<input type="color" id="inputColor"> Border Color</input>
@@ -415,7 +417,7 @@ var titleRightShift = 0
 var canvas = document.getElementById("canvas")
 var card = canvas.getContext("2d")
 //Load dynamic images
-var dynamicImageList = ["borderColor", "secondBorderColor", "thirdBorderColor", "borderCreature", "borderLegendary", "secondBorderLegendary", "borderRareStamp", "secondBorderRareStamp", "art", "setSymbol", "watermark", "multiMask", "rareStampMask", "frameMask", "legendFrameMask", "borderMask", "borderNyx", "secondBorderNyx", "borderMiracle", "secondBorderMiracle", "borderFlipIcon", "borderFlipCircle", "borderFlipTip"]
+var dynamicImageList = ["borderColor", "secondBorderColor", "thirdBorderColor", "borderCreature", "borderLegendary", "secondBorderLegendary", "borderRareStamp", "secondBorderRareStamp", "art", "setSymbol", "watermark", "multiMask", "rareStampMask", "frameMask", "legendFrameMask", "borderMask", "borderNyx", "secondBorderNyx", "borderMiracle", "secondBorderMiracle", "borderFlipIcon", "borderFlipCircle", "borderFlipTip", "borderDarkTitle", "secondBorderDarkTitle"]
 for (i = 0; i < dynamicImageList.length; i ++) {
 	var imgName = "img" + dynamicImageList[i].charAt(0).toUpperCase() + dynamicImageList[i].slice(1)
 	window[imgName] = new Image()
@@ -512,15 +514,21 @@ function updateColor() {
 	var firstColorPath = borderPath + document.getElementById("colorSelection").value
 	var secondColorPath = borderPath + document.getElementById("secondColorSelection").value
 	var thirdColorPath = borderPath + document.getElementById("thirdColorSelection").value
-	imgBorderColor.src = firstColorPath + "/frame.png"
-	imgSecondBorderColor.src = secondColorPath + "/frame.png"
-	imgThirdBorderColor.src = thirdColorPath + "/frame.png"
-	if (thirdColor == true) {
-		imgBorderCreature.src = thirdColorPath + "/pt.png"
-	} else if (secondColor == true) {
-		imgBorderCreature.src = secondColorPath + "/pt.png"
+	var altframe = ""
+	if (document.getElementById("checkboxFlippedDark").checked == true && flipBorder == true) {
+		altframe = "dark"
 	} else {
-		imgBorderCreature.src = firstColorPath + "/pt.png"
+		altframe = ""
+	}
+	imgBorderColor.src = firstColorPath + "/" +  altframe + "frame.png"
+	imgSecondBorderColor.src = secondColorPath + "/" +  altframe + "frame.png"
+	imgThirdBorderColor.src = thirdColorPath + "/" +  altframe + "frame.png"
+	if (thirdColor == true) {
+		imgBorderCreature.src = thirdColorPath + "/" +  altframe + "pt.png"
+	} else if (secondColor == true) {
+		imgBorderCreature.src = secondColorPath + "/" +  altframe + "pt.png"
+	} else {
+		imgBorderCreature.src = firstColorPath + "/" +  altframe + "pt.png"
 	}
 	if (legendaryBorder == true) {
 		imgBorderLegendary.src = firstColorPath + "/legendary.png"
@@ -540,13 +548,21 @@ function updateColor() {
 	}
 	if (miracleBorder == true) {
 		if (thirdColor == true) {
-			imgBorderMiracle.src = thirdColorPath + "/miracle.png"
+			imgBorderMiracle.src = thirdColorPath + "/" +  altframe + "miracle.png"
 		} else {
-			imgBorderMiracle.src = firstColorPath + "/miracle.png"
-			imgSecondBorderMiracle.src = secondColorPath + "/miracle.png"
+			imgBorderMiracle.src = firstColorPath + "/" +  altframe + "miracle.png"
+			imgSecondBorderMiracle.src = secondColorPath + "/" +  altframe + "miracle.png"
 		}
 	}
 	if (flipBorder == true) {
+		if (thirdColor == true) {
+			imgBorderDarkTitle.src = thirdColorPath + "/darkTitle.png"
+		} else {
+			imgBorderDarkTitle.src = firstColorPath + "/darkTitle.png"
+			if (secondColor == true) {
+				imgSecondBorderDarkTitle.src = secondColorPath + "/darkTitle.png"
+			}
+		}
 		if (secondColor == true) {
 			imgBorderFlipTip.src = secondColorPath + "/flipTip.png"
 		} else {
@@ -644,6 +660,16 @@ function drawBorder() {
 		card.font = "28px belerenb"
 		card.fillText(document.getElementById("inputFlipTip").value, 688 - card.measureText(document.getElementById("inputFlipTip").value).width, 880)
 	}
+	// if (document.getElementById("checkboxFlippedDark").checked == true && flipBorder == true) {
+	// 	if (thirdColor == true) {
+	// 		drawMask(imgBorderDarkTitle, 0, 0, canvas.width, canvas.height, imgFrameMask, false, false)
+	// 	} else {
+	// 		drawMask(imgBorderDarkTitle, 0, 0, canvas.width, canvas.height, imgFrameMask, false, false)
+	// 		if (secondColor == true) {
+	// 			drawMask(imgSecondBorderDarkTitle, 0, 0, canvas.width, canvas.height, imgFrameMask, imgMultiGradient, "reverseSecond")
+	// 		}
+	// 	}
+	// }
 }
 //Draw Set Symbol
 function drawSetSymbol() {
