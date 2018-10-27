@@ -1,4 +1,4 @@
-<!DOCTYPE HTML>
+<!DOCTYPE html5>
 <html>
 <head>
 	<title>Card Conjurer - Custom Magic Card Maker (v1.3.1)</title>
@@ -10,15 +10,14 @@
 	<div class="title">Card Conjurer</div>
 </head>
 <!-- <img src="data/background.png"></img> -->
-<body>
+<body onresize="resizeThings()" onload="resizeThings()">
 	<div class="row">
 		<div class="column"><canvas id="canvas" width="749" height="1044"></canvas></div>
-		<!--OPTIONS-->
-		<div class="column">
-			<br/>
-			<div style="width: 375px">
-				<div class="toggle" onclick="toggleVisibility('cardBorder', this, 'toggleShown', 'hidden', 'shown')">Card Border</div>
-				<div class="cardBorder hidden">
+		<div class="column" id="optionsColumn">
+			<!--OPTIONS-->
+			<div class="section">
+				<div class="toggler" onclick="toggleSection(this)">Card Border</div>
+				<div class="togglee shown">
 					Border
 					<select id="borderSelection" onchange="changeBorder()">
 						<option value="m15/">M15</option>
@@ -36,7 +35,11 @@
 					<br/>
 					<input type="checkbox" id="checkboxCreature" onchange="updateColor()">Power/Toughness
 					<input id="inputPowerToughness" value="" type="text"></input>
-					<br/>
+				</div>
+			</div>
+			<div class="section">
+				<div class="toggler" onclick="toggleSection(this)">Border (Advanced)</div>
+				<div class="togglee">
 					<input type="checkbox" id="checkboxLegendary" onchange="updateColor()">Legendary</input>
 					<br/>
 					<input type="checkbox" id="checkboxNyx" onchange="updateColor()">Nyx</input>
@@ -65,10 +68,11 @@
 					<input type="color" id="inputColor"> Border Color</input>
 					<br/>
 					<input type="checkbox" id="checkboxFoil">Foil</input>
-					<br/>
 				</div>
-				<div class="toggle" onclick="toggleVisibility('nameCostType', this, 'toggleShown', 'hidden', 'shown')">Name, Mana Cost, Type</div>
-				<div class="nameCostType hidden">
+			</div>
+			<div class="section">
+				<div class="toggler" onclick="toggleSection(this)">Name, Mana Cost, Type</div>
+				<div class="togglee">
 					Name
 					<input id="inputName" type="text"></input>
 					<br/>
@@ -77,10 +81,11 @@
 					<br/>
 					Type
 					<input id="inputType" type="text"></input>
-					<br/>
 				</div>
-				<div class="toggle" onclick="toggleVisibility('rulesText', this, 'toggleShown', 'hidden', 'shown')">Rules Text</div>
-				<div class="rulesText hidden">
+			</div>
+			<div class="section">
+				<div class="toggler" onclick="toggleSection(this)">Rules Text</div>
+				<div class="togglee">
 					Rules Text
 					<br/>
 					<textarea id="inputText" rows="5" cols="40" style="width: 99%; resize: vertical; height: 100px"></textarea>
@@ -93,10 +98,11 @@
 					<br/>
 					Shift All Text Down
 					<input id="textDown" type="number" min="0" max="300" value="0"></input>
-					<br/>
 				</div>
-				<div class="toggle" onclick="toggleVisibility('cardArt', this, 'toggleShown', 'hidden', 'shown')">Card Art</div>
-				<div class="cardArt hidden">
+			</div>
+			<div class="section">
+				<div class="toggler" onclick="toggleSection(this)">Card Art</div>
+				<div class="togglee">
 					Image
 					<input type="file" accept="image/*" onchange="loadImage(event, imgArt, true)" id="inputPicture"></input>
 					<br/>
@@ -108,10 +114,11 @@
 					<br/>
 					Image Up
 					<input id="imageUp" type="number" value="0" step="1"></input>
-					<br/>
 				</div>
-				<div class="toggle" onclick="toggleVisibility('otherInfo', this, 'toggleShown', 'hidden', 'shown')">Other Information</div>
-				<div class="otherInfo hidden">
+			</div>
+			<div class="section">
+				<div class="toggler" onclick="toggleSection(this)">Bottom Information</div>
+				<div class="togglee">
 					Other Info
 					<input id="inputInfo" value="Not A Real Card" type="text"></input>
 					<br/>
@@ -131,10 +138,11 @@
 					<input id="inputArtist" value="" type="text"></input>
 					<br/>
 					<input id="checkboxArtistColor" type="checkbox">Make Artist Credit font black</input>
-					<br/>
 				</div>
-				<div class="toggle" onclick="toggleVisibility('setSymbolWatermark', this, 'toggleShown', 'hidden', 'shown')">Set Symbol and Watermark</div>
-				<div class="setSymbolWatermark hidden">
+			</div>
+			<div class="section">
+				<div class="toggler" onclick="toggleSection(this)">Set Symbol and Watermark</div>
+				<div class="togglee">
 					<input type="checkbox" id="checkboxSetSymbol" checked="true">Set Symbol</input>
 					<br>
 					Set Code
@@ -151,9 +159,11 @@
 					<br/><br/>
 					<input type="checkbox" id="checkboxWatermark" checked="true"></input>
 					Watermark
+					<br/>
 					<input type="file" accept="image/*" onchange="loadImage(event, imgWatermark, true)" id="inputWatermark"></input>
 					<br/>
 					Watermark Color
+					<br/>
 					<select id="watermarkColorSelection">
 						<option value="#afa360">White</option>
 						<option value="#04527c">Blue</option>
@@ -164,11 +174,20 @@
 						<option value="#616b72">Artifact/Colorless</option>
 					</select>
 					<br/>
-					<input type="checkbox" id="checkboxSecondWatermarkColor"> Second Watermark Color <select id="secondWatermarkColorSelection"></select></input>
+					<input type="checkbox" id="checkboxSecondWatermarkColor"> Second Watermark Color
 					<br/>
+					<select id="secondWatermarkColorSelection"></select></input>
 				</div>
-				<div class="toggle" onclick="downloadCardImage()" id="downloadCardImage" href="" download="card.jpg">Download</div>
 			</div>
+			<div class="section">
+				<div class="toggler" onclick="toggleSection(this)">Download/Options</div>
+				<div class="togglee">
+					Frame Rate
+					<input type="number" id="inputFPS" value="10" min="0" onchange="window.clearInterval(cardClockInterval); cardClockInterval = setInterval(cardClock, 1000 / document.getElementById('inputFPS').value)"></input>
+					<div onclick="downloadCardImage()" id="downloadCardImage" href="" download="card.jpg">Download</div>
+				</div>
+			</div>
+			<!--END-->
 		</div>
 	</div>
 	<div class="row text">
@@ -304,29 +323,24 @@
 	font-family: belerenbsc;
 	font-size: 16px;
 }
-.toggle {
+.section {
+	border: 1px solid rgb(128, 255, 128);
+	background-color: rgba(0, 0, 0, 0.5);
+}
+.toggler {
 	text-align: center;
 	color: rgb(255, 255, 255);
 	font-family: belerenbsc;
 	font-size: 20px;
 	width: 100%;
 	padding: 5px;
-	border: 1px solid rgb(128, 255, 128);
+	
 }
-.toggle:hover {
+.toggler:hover {
 	color: rgb(128, 255, 128);
 }
-.toggleShown {
-	color: rgb(128, 255, 128);
-	border-color: rgb(128, 255, 128);
-	border-style: solid solid hidden solid;
-}
-.hidden {
-	display: none;
-	font-size: 100px;
-}
-.shown {
-	width: 100%;
+.togglee {
+	width: calc(100% - 12px);
 	padding: 5px;
 	border-width: 1px;
 	border-color: rgb(128, 255, 128);
@@ -334,6 +348,10 @@
 	font-size: 20px;
 	color: rgb(255,255,255);
 	font-family: belerenbsc;
+	display: none;
+}
+.shown {
+	display: block;
 }
 .shown * {
 	font-family: mplantin;
@@ -405,7 +423,7 @@ a:active {
 
 
 
-<script>
+<script crossorigin="anonymous">
 //Load the initial border (m15)
 changeBorder()
 //set up initial variables
@@ -417,7 +435,7 @@ var titleRightShift = 0
 var canvas = document.getElementById("canvas")
 var card = canvas.getContext("2d")
 //Load dynamic images
-var dynamicImageList = ["borderColor", "secondBorderColor", "thirdBorderColor", "borderCreature", "borderLegendary", "secondBorderLegendary", "borderRareStamp", "secondBorderRareStamp", "art", "setSymbol", "watermark", "multiMask", "rareStampMask", "frameMask", "legendFrameMask", "borderMask", "borderNyx", "secondBorderNyx", "borderMiracle", "secondBorderMiracle", "borderFlipIcon", "borderFlipCircle", "borderFlipTip", "borderDarkTitle", "secondBorderDarkTitle"]
+var dynamicImageList = ["borderColor", "secondBorderColor", "thirdBorderColor", "borderCreature", "borderLegendary", "secondBorderLegendary", "borderRareStamp", "secondBorderRareStamp", "art", "setSymbol", "watermark", "multiMask", "rareStampMask", "frameMask", "legendFrameMask", "borderMask", "borderNyx", "secondBorderNyx", "borderMiracle", "secondBorderMiracle", "borderFlipIcon", "borderFlipCircle", "borderFlipTip", "borderFlippedDark", "secondBorderFlippedDark"]
 for (i = 0; i < dynamicImageList.length; i ++) {
 	var imgName = "img" + dynamicImageList[i].charAt(0).toUpperCase() + dynamicImageList[i].slice(1)
 	window[imgName] = new Image()
@@ -427,6 +445,7 @@ var staticImageList = ["artistBrush", "foil", "stampGradient", "multiGradient", 
 for (i = 0; i < staticImageList.length; i ++) {
 	var imgName = "img" + staticImageList[i].charAt(0).toUpperCase() + staticImageList[i].slice(1)
 	window[imgName] = new Image()
+	//window[imgName].crossOrigin = "use-credentials"
 	window[imgName].src = "data/borders/" + staticImageList[i] + ".png"
 }
 //Mana symbol Array setup
@@ -445,7 +464,7 @@ loadSetSymbol()
 document.getElementById("secondWatermarkColorSelection").innerHTML = document.getElementById("watermarkColorSelection").innerHTML
 
 //Runs ten times every second (main loop)
-setInterval(function() {
+function cardClock() {
 		//Insures that the corners of the final image are transparent
 		card.globalCompositeOperation = "source-over"
 		drawMask(document.getElementById("inputColor").value, 0, 0, canvas.width, canvas.height, imgCardMask, false, false)
@@ -484,7 +503,8 @@ setInterval(function() {
 		//card.moveTo(0, setSymbolY)
 		//card.lineTo(749, setSymbolY)
 		//card.stroke()
-	}, 100)
+	}
+var cardClockInterval = setInterval(cardClock, 1000 / document.getElementById("inputFPS").value)
 
 
 //The two following functions load different types of borders
@@ -520,9 +540,9 @@ function updateColor() {
 	} else {
 		altframe = ""
 	}
-	imgBorderColor.src = firstColorPath + "/" +  altframe + "frame.png"
-	imgSecondBorderColor.src = secondColorPath + "/" +  altframe + "frame.png"
-	imgThirdBorderColor.src = thirdColorPath + "/" +  altframe + "frame.png"
+	imgBorderColor.src = firstColorPath + "/frame.png"
+	imgSecondBorderColor.src = secondColorPath + "/frame.png"
+	imgThirdBorderColor.src = thirdColorPath + "/frame.png"
 	if (thirdColor == true) {
 		imgBorderCreature.src = thirdColorPath + "/" +  altframe + "pt.png"
 	} else if (secondColor == true) {
@@ -556,23 +576,18 @@ function updateColor() {
 	}
 	if (flipBorder == true) {
 		if (thirdColor == true) {
-			imgBorderDarkTitle.src = thirdColorPath + "/darkTitle.png"
+			imgBorderFlippedDark.src = thirdColorPath + "/flippedDark.png"
 		} else {
-			imgBorderDarkTitle.src = firstColorPath + "/darkTitle.png"
-			if (secondColor == true) {
-				imgSecondBorderDarkTitle.src = secondColorPath + "/darkTitle.png"
-			}
+			imgBorderFlippedDark.src = firstColorPath + "/flippedDark.png"
+			imgSecondBorderFlippedDark.src = secondColorPath + "/flippedDark.png"
 		}
 		if (secondColor == true) {
 			imgBorderFlipTip.src = secondColorPath + "/flipTip.png"
 		} else {
 			imgBorderFlipTip.src = firstColorPath + "/flipTip.png"
 		}
-		titleRightShift = 50
 		imgBorderFlipCircle.src = firstColorPath + "/flipCircle.png"
 		imgBorderFlipIcon.src = "data/borders/icons/" + document.getElementById("inputFlipIcon").value
-	} else {
-		titleRightShift = 0
 	}
 }
 //Draw Picture
@@ -649,27 +664,34 @@ function drawBorder() {
 		}
 	}
 	//FLIP CARDS
-	if (document.getElementById("checkboxFlipIcon").checked == true && flipBorder == true) {
-		card.drawImage(imgBorderFlipCircle, 0, 0, canvas.width, canvas.height)
-		card.drawImage(imgBorderFlipIcon, 39, 51, 60, 60)
+	if (flipBorder == true) {
+		if (document.getElementById("checkboxFlippedDark").checked == true && flipBorder == true) {
+			if (thirdColor == true) {
+				drawMask(imgBorderFlippedDark, 0, 0, canvas.width, canvas.height, imgFrameMask, false, false)
+			} else {
+				drawMask(imgBorderFlippedDark, 0, 0, canvas.width, canvas.height, imgFrameMask, false, false)
+				if (secondColor == true) {
+					drawMask(imgSecondBorderFlippedDark, 0, 0, canvas.width, canvas.height, imgSecondBorderFlippedDark, imgMultiGradient, "reverseSecond")
+				}
+			}
+		}
+		if (document.getElementById("checkboxFlipIcon").checked == true) {
+			card.drawImage(imgBorderFlipCircle, 0, 0, canvas.width, canvas.height)
+			card.drawImage(imgBorderFlipIcon, 39, 51, 60, 60)
+		}
+		if (document.getElementById("checkboxFlipTip").checked == true) {
+			card.drawImage(imgBorderFlipTip, 0, 0, canvas.width, canvas.height)
+			card.fillStyle="#666"
+			canvas.style.letterSpacing = "0px"
+			card.font = "28px belerenb"
+			card.fillText(document.getElementById("inputFlipTip").value, 688 - card.measureText(document.getElementById("inputFlipTip").value).width, 880)
+		}
+		if (document.getElementById("checkboxFlipIcon").checked == true || document.getElementById("checkboxFlippedDark").checked == true) {
+			titleRightShift = 50
+		} else {
+			titleRightShift = 0
+		}
 	}
-	if (document.getElementById("checkboxFlipTip").checked == true && flipBorder == true) {
-		card.drawImage(imgBorderFlipTip, 0, 0, canvas.width, canvas.height)
-		card.fillStyle="#666"
-		canvas.style.letterSpacing = "0px"
-		card.font = "28px belerenb"
-		card.fillText(document.getElementById("inputFlipTip").value, 688 - card.measureText(document.getElementById("inputFlipTip").value).width, 880)
-	}
-	// if (document.getElementById("checkboxFlippedDark").checked == true && flipBorder == true) {
-	// 	if (thirdColor == true) {
-	// 		drawMask(imgBorderDarkTitle, 0, 0, canvas.width, canvas.height, imgFrameMask, false, false)
-	// 	} else {
-	// 		drawMask(imgBorderDarkTitle, 0, 0, canvas.width, canvas.height, imgFrameMask, false, false)
-	// 		if (secondColor == true) {
-	// 			drawMask(imgSecondBorderDarkTitle, 0, 0, canvas.width, canvas.height, imgFrameMask, imgMultiGradient, "reverseSecond")
-	// 		}
-	// 	}
-	// }
 }
 //Draw Set Symbol
 function drawSetSymbol() {
@@ -733,7 +755,11 @@ function writeText() {
 	//Draws the entered text onto the card, also draws the power/toughness box if necessary
 	//All use these:
 	card.textBaseline = "top"
-	card.fillStyle = "Black"
+	if (flipBorder == true && document.getElementById("checkboxFlippedDark").checked == true) {
+		card.fillStyle = "White"
+	} else {
+		card.fillStyle = "Black"
+	}
 	//Title
 	canvas.style.letterSpacing = titleFontSpacing
 	card.font = titleFont	
@@ -742,6 +768,7 @@ function writeText() {
 	canvas.style.letterSpacing = typeFontSpacing
 	card.font = typeFont
 	card.fillText(document.getElementById("inputType").value, typeX, typeY)
+	card.fillStyle = "Black"
 	//Rules Text
 	canvas.style.letterSpacing = textFontSpacing + "px"
 	card.font = document.getElementById("textSize").value + textFont
@@ -920,21 +947,28 @@ function drawText(text, xCoord, yCoord) {
 }
 
 //Toggles the visibility of predetermined sections of the input boxes
-function toggleVisibility(targetClass, self, selfClass, hiddenClass, shownClass) {
-	var alreadyShown = document.getElementsByClassName(selfClass)
-	if (alreadyShown.length >= 1 && alreadyShown[0] != self) {
-		alreadyShown[0].click()
+function toggleSection(target) {
+	for (i = 0; i < target.parentElement.parentElement.childNodes.length; i++) {
+		var targetChild = target.parentElement.parentElement.childNodes[i].childNodes[3]
+		if (targetChild != undefined && targetChild.classList.contains("shown") == true) {
+			targetChild.classList.toggle("shown")
+		}
 	}
-	self.classList.toggle(selfClass)
-	var elementList = document.getElementsByClassName(targetClass)
-	for (i = 0; i < elementList.length; i ++) {
-		elementList[i].classList.toggle(hiddenClass)
-		elementList[i].classList.toggle(shownClass)
+	target.parentElement.childNodes[3].classList.toggle("shown")
+}
+
+//Resizes anything that may need to be resized
+function resizeThings() {
+	if (window.innerWidth > 1100) {
+		document.getElementById("optionsColumn").style = "width: calc(100% - 777px)"
+	} else {
+		document.getElementById("optionsColumn").style = "width: 100%"
 	}
 }
 
 //runs the autocrop function for the chosen set symbol
 function loadSetSymbol() {
+	imgSetSymbol.crossOrigin = "anonymous"
 	imgSetSymbol.src = "https://raw.githubusercontent.com/ImKyle4815/MTG-Set-Symbols/master/setSymbols/" + document.getElementById("setSymbolCode").value.toUpperCase() + "_" + document.getElementById("setSymbolRarity").value.toUpperCase() + ".png"
 }
 
