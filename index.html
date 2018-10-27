@@ -184,7 +184,7 @@
 				<div class="togglee">
 					Frame Rate
 					<input type="number" id="inputFPS" value="10" min="0" onchange="window.clearInterval(cardClockInterval); cardClockInterval = setInterval(cardClock, 1000 / document.getElementById('inputFPS').value)"></input>
-					<a onclick="downloadCardImage(this)" id="downloadCardImage" href="" download="card.png">Download</a>
+					<a onclick="downloadCardImage(this)" id="downloadCardImage" href="" target="_blank" download="card.png">Download</a>
 				</div>
 			</div>
 			<!--END-->
