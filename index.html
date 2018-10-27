@@ -1,7 +1,7 @@
 <!DOCTYPE html5>
 <html>
 <head>
-	<title>Card Conjurer - Custom Magic Card Maker (v1.3.1)</title>
+	<title>Card Conjurer v1.3.4</title>
 	<script src="data/scripts/loadScript.js"></script>
 	<script src="data/scripts/loadImage.js"></script>
 	<script src="data/scripts/loadColors.js"></script>
@@ -68,6 +68,9 @@
 					<input type="color" id="inputColor"> Border Color</input>
 					<br/>
 					<input type="checkbox" id="checkboxFoil">Foil</input>
+					<br/>
+					<input type="checkbox" id="checkboxIdentity">Color Identity
+					<input id="inputIdentity"type="text"></input>
 				</div>
 			</div>
 			<div class="section">
@@ -431,6 +434,7 @@ var borderPath
 var secondColor
 var thirdColor
 var titleRightShift = 0
+var typeRightShift = 0
 //set up canvas
 var canvas = document.getElementById("canvas")
 var card = canvas.getContext("2d")
@@ -441,11 +445,10 @@ for (i = 0; i < dynamicImageList.length; i ++) {
 	window[imgName] = new Image()
 }
 //Load static images
-var staticImageList = ["artistBrush", "foil", "stampGradient", "multiGradient", "rareStamp", "cardMask", "artMask", "bar"]
+var staticImageList = ["artistBrush", "foil", "stampGradient", "multiGradient", "rareStamp", "cardMask", "artMask", "bar", "identity"]
 for (i = 0; i < staticImageList.length; i ++) {
 	var imgName = "img" + staticImageList[i].charAt(0).toUpperCase() + staticImageList[i].slice(1)
 	window[imgName] = new Image()
-	//window[imgName].crossOrigin = "use-credentials"
 	window[imgName].src = "data/borders/" + staticImageList[i] + ".png"
 }
 //Mana symbol Array setup
@@ -680,6 +683,65 @@ function drawBorder() {
 			titleRightShift = 0
 		}
 	}
+	//COLOR IDENTITY
+	if (document.getElementById("checkboxIdentity").checked == true) {
+		var identityList = document.getElementById("inputIdentity").value.split(" ")
+		var angleSize = Math.PI * 2 / identityList.length
+		var identityRadius = 14
+		var identityX = typeX + 8
+		var identityY = typeY + 21
+		switch (identityList.length) {
+			case 1:
+				var originAngle = 0
+				break;
+			case 2:
+				var originAngle = 3 * Math.PI / 4
+				break;
+			case 3:
+				var originAngle = 7 * Math.PI / 6
+				break;
+			case 4:
+				var originAngle = 3 * Math.PI / 2
+				break;
+			case 5:
+				var originAngle = 13 * Math.PI / 10
+				break;
+			default:
+				var originAngle = 0
+		}
+		for (i = 0; i < identityList.length; i ++) {
+			switch (identityList[i]) {
+				case "w":
+					card.fillStyle = "#f3f2ef"
+					break;
+				case "u":
+					card.fillStyle = "#1d7097"
+					break;
+				case "b":
+					card.fillStyle = "#31302e"
+					break;
+				case "r":
+					card.fillStyle = "#bf544c"
+					break;
+				case "g":
+					card.fillStyle = "#1c6449"
+					break;
+				case "m":
+					card.fillStyle = "#e3d591"
+					break;
+				default:
+					card.fillStyle = "#e0e0e0"
+			}
+			var startAngle = originAngle + i * angleSize
+			card.beginPath()
+			card.moveTo(identityX, identityY)
+			card.arc(identityX, identityY, identityRadius, startAngle, startAngle + angleSize)
+			card.lineTo(identityX, identityY)
+			card.fill()
+		}
+		card.drawImage(imgIdentity, identityX - identityRadius, identityY - identityRadius, 2 * identityRadius, 2 * identityRadius)
+		typeRightShift = 33
+	}
 	//RARE STAMP
 	if (document.getElementById("checkboxRareStamp").checked == true && stampBorder == true) {
 		card.drawImage(imgBorderRareStamp, 329, rareStampY - 15, 90, 50)
@@ -767,13 +829,7 @@ function writeText() {
 	//Type
 	canvas.style.letterSpacing = typeFontSpacing
 	card.font = typeFont
-	card.fillText(document.getElementById("inputType").value, typeX, typeY)
-	card.fillStyle = "Black"
-	//Rules Text
-	canvas.style.letterSpacing = textFontSpacing + "px"
-	card.font = document.getElementById("textSize").value + textFont
-	var text = document.getElementById("inputText").value
-	drawText(text, textX, textY)
+	card.fillText(document.getElementById("inputType").value, typeX + typeRightShift, typeY)
 	//Power/Toughness
 	if (document.getElementById("checkboxCreature").checked == true) {
 		card.drawImage(imgBorderCreature, ptX, ptY, ptWidth, ptHeight)
@@ -782,6 +838,12 @@ function writeText() {
 		powerToughness = document.getElementById("inputPowerToughness").value
 		card.fillText(powerToughness, ptTextX - (card.measureText(powerToughness).width / 2), ptTextY)
 	}
+	card.fillStyle = "Black"
+	//Rules Text
+	canvas.style.letterSpacing = textFontSpacing + "px"
+	card.font = document.getElementById("textSize").value + textFont
+	var text = document.getElementById("inputText").value
+	drawText(text, textX, textY)
 }
 //Bottom info on M15 cards
 function bottomInfoM15() {
