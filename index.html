@@ -452,7 +452,7 @@ for (i = 0; i < staticImageList.length; i ++) {
 	window[imgName].src = "data/borders/" + staticImageList[i] + ".png"
 }
 //Mana symbol Array setup
-var manaSymbolCode = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "w", "u", "b", "r", "g", "2w", "2u", "2b", "2r", "2g", "pw", "pu", "pb", "pr", "pg", "wu", "wb", "ub", "ur", "br", "bg", "rg", "rw", "gw", "gu", "x", "snow", "c", "t","untap", "e"]
+var manaSymbolCode = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "w", "u", "b", "r", "g", "2w", "2u", "2b", "2r", "2g", "pw", "pu", "pb", "pr", "pg", "wu", "wb", "ub", "ur", "br", "bg", "rg", "rw", "gw", "gu", "x", "snow", "c", "t","untap", "e", "y", "z", "half", "infinity"]
 var manaSymbolImages = new Array()
 for (var i = 0; i < manaSymbolCode.length; i++) {
 	manaSymbolImages[i] = new Image()
@@ -741,6 +741,8 @@ function drawBorder() {
 		}
 		card.drawImage(imgIdentity, identityX - identityRadius, identityY - identityRadius, 2 * identityRadius, 2 * identityRadius)
 		typeRightShift = 33
+	} else {
+		typeRightShift = 0
 	}
 	//RARE STAMP
 	if (document.getElementById("checkboxRareStamp").checked == true && stampBorder == true) {
