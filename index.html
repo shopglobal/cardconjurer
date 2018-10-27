@@ -616,18 +616,6 @@ function drawBorder() {
 	if (document.getElementById("checkboxSilverBorder").checked == true) {
 		drawMask("#a3aeb7", 0, 0, canvas.width, canvas.height, imgBorderMask, imgFrameMask, "reverseSecond")
 	}
-	//RARE STAMP
-	if (document.getElementById("checkboxRareStamp").checked == true && stampBorder == true) {
-		card.drawImage(imgBorderRareStamp, 329, rareStampY - 15, 90, 50)
-
-		if (document.getElementById("checkboxSecondColor").checked == true) {
-			drawMask(imgSecondBorderRareStamp, 329, rareStampY - 15, 90, 50, imgSecondBorderRareStamp, imgStampGradient, "reverseSecond")
-		}
-		//Draws over the rare stamp (part that's usually back) to match custom border color
-		drawMask(document.getElementById("inputColor").value, 329, rareStampY - 15, 90, 50, imgRareStampMask, false, false)
-		//This is when the holo stamp is drawn
-		card.drawImage(imgRareStamp, 340, rareStampY, 70, 37)
-	}
 	//NYX
 	if (document.getElementById("checkboxNyx").checked == true && nyxBorder == true) {
 		if (thirdColor == true) {
@@ -691,6 +679,18 @@ function drawBorder() {
 		} else {
 			titleRightShift = 0
 		}
+	}
+	//RARE STAMP
+	if (document.getElementById("checkboxRareStamp").checked == true && stampBorder == true) {
+		card.drawImage(imgBorderRareStamp, 329, rareStampY - 15, 90, 50)
+
+		if (document.getElementById("checkboxSecondColor").checked == true) {
+			drawMask(imgSecondBorderRareStamp, 329, rareStampY - 15, 90, 50, imgSecondBorderRareStamp, imgStampGradient, "reverseSecond")
+		}
+		//Draws over the rare stamp (part that's usually back) to match custom border color
+		drawMask(document.getElementById("inputColor").value, 329, rareStampY - 15, 90, 50, imgRareStampMask, false, false)
+		//This is when the holo stamp is drawn
+		card.drawImage(imgRareStamp, 340, rareStampY, 70, 37)
 	}
 }
 //Draw Set Symbol
