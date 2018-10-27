@@ -184,7 +184,7 @@
 				<div class="togglee">
 					Frame Rate
 					<input type="number" id="inputFPS" value="10" min="0" onchange="window.clearInterval(cardClockInterval); cardClockInterval = setInterval(cardClock, 1000 / document.getElementById('inputFPS').value)"></input>
-					<div onclick="downloadCardImage()" id="downloadCardImage" href="" download="card.jpg">Download</div>
+					<a onclick="downloadCardImage(this)" id="downloadCardImage" href="" download="card.png">Download</a>
 				</div>
 			</div>
 			<!--END-->
@@ -968,15 +968,17 @@ function resizeThings() {
 
 //runs the autocrop function for the chosen set symbol
 function loadSetSymbol() {
-	imgSetSymbol.crossOrigin = "anonymous"
+	imgSetSymbol.crossOrigin = "Anonymous"
 	imgSetSymbol.src = "https://raw.githubusercontent.com/ImKyle4815/MTG-Set-Symbols/master/setSymbols/" + document.getElementById("setSymbolCode").value.toUpperCase() + "_" + document.getElementById("setSymbolRarity").value.toUpperCase() + ".png"
 }
 
 //Best for last - downloads the image!
-function downloadCardImage(el) {
-	alert("This may not work because the canvas is 'tainted' - if you know how to avoid this please tell me")
+function downloadCardImage(linkElement) {
 	var cardImageData = canvas.toDataURL()
-	el.href = cardImageData
+	if (cardImageData == undefined) {
+		alert("Sorry, it seems that you cannot download your card. Please try using a different browser.")
+	}
+	linkElement.href = cardImageData
 }
 </script>
 <html>
